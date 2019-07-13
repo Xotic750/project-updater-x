@@ -101,7 +101,5 @@
     "node": ">=8.11.4",
     "npm": "6.4.1"
   },
-  "browserslist": [
-    "node >= 8"
-  ]
+  "browserslist": []
 }
