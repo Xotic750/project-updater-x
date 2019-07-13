@@ -532,7 +532,7 @@ const letsGo = async () => {
       console.log();
       console.log('GitHub release');
       console.log();
-      const remoteRepo = GITHUB_API.getUser().getRepo(GITHUB_REPO_PREFIX, name);
+      const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
       console.log(remoteRepo);
 
       if (GENERATE_RELEASE_NAME) {
