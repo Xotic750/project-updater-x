@@ -35,6 +35,7 @@
   "dependencies": {
     "github-api": "^3.2.2",
     "haikunator": "^2.1.1",
+    "readline-sync": "^1.4.9",
     "semver": "^6.2.0",
     "shelljs": "^0.8.3"
   },

@@ -1,3 +1,4 @@
+const readlineSync = require('readline-sync');
 const fs = require('fs');
 const shell = require('shelljs');
 const SemVer = require('semver');
@@ -10,7 +11,7 @@ const templatePackage = require('../template/package.json');
  *
  * @type {boolean}
  * */
-const DRY_RUN = false;
+const DRY_RUN = true;
 /**
  * The temporary work directory.
  *
@@ -24,19 +25,6 @@ const TMP = 'tmp';
  * */
 const REMOVE_LOCAL_COPY = true;
 
-/* Only works with basic auth, not 2FA! */
-/**
- * GitHub login.
- *
- * @type {string}
- * */
-const GITHUB_LOGIN = '';
-/**
- * GitHub password.
- *
- * @type {string}
- * */
-const GITHUB_PASSWORD = '';
 /**
  * GitHub repo prefix.
  *
@@ -276,268 +264,330 @@ const copyFiles = [
   'jest.config.js',
   'webpack.config.js',
 ];
-
-if (DRY_RUN) {
-  console.log();
-  console.log('Dry run');
-  console.log();
-}
-
-const projectUpdate = async (project) => {
-  const {name, identifier, regenerator} = project;
-  const repoURL = `${GITHUB_URL_PREFIX}/${name}.git`;
-  console.log();
-  console.log('------------------------------------------------------------');
-  console.log(`Name: ${name}`);
-  console.log('------------------------------------------------------------');
-  console.log();
-  const repoDir = `${TMP}/${name}`;
-
-  /* Clone the GitHub repo. */
-  console.log();
-  console.log(`Cloning: ${repoURL}`);
-  console.log();
-  const cloneResult = shell.exec(`git clone ${repoURL} ${repoDir}`);
-
-  if (cloneResult.code !== 0) {
-    throw new Error(cloneResult.stderr);
-  }
-
-  /* Copy the listed files from the template to the repo. */
-  console.log();
-  console.log('Copying ...');
-  console.log();
-  copyFiles.forEach((file) => {
-    /* Requires babel regenerator runtime transform. */
-    if (regenerator && file === '.babelrc') {
-      const regeneratorFile = `${file}.regenerator`;
-      console.log(`File: ${regeneratorFile}`);
-      const copyResult = shell.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
-
-      if (copyResult.code !== 0) {
-        throw new Error(copyResult.stderr);
-      }
-    } else {
-      console.log(`File: ${file}`);
-      const copyResult = shell.cp(`template/${file}`, `${repoDir}/${file}`);
-
-      if (copyResult.code !== 0) {
-        throw new Error(copyResult.stderr);
-      }
-    }
-  });
-
-  /* Get repo package.json and update the information. */
-  console.log();
-  console.log('Updating package.json');
-  console.log();
-  /* eslint-disable-next-line global-require,import/no-dynamic-require */
-  const repoPackage = require(`../${repoDir}/package.json`);
-
-  const modifiedRepoPackage = Object.keys(repoPackage).reduce((obj, key) => {
-    const templateValue = templatePackage[key];
-
-    obj[key] = typeof templateValue === 'undefined' ? repoPackage[key] : templateValue;
-
-    return obj;
-  }, {});
-
-  const newRepoPackage = packageKeyOrder.reduce((obj, key) => {
-    obj[key] = modifiedRepoPackage[key];
-
-    return obj;
-  }, {});
-
-  const semver = new SemVer(newRepoPackage.version).inc(identifier);
-  newRepoPackage.version = semver.toString();
-
-  /* Update the repo dependencies */
-  console.log();
-  console.log('Updating dependencies');
-  console.log();
-  const salitaResult = shell.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
-
-  if (salitaResult.code !== 0) {
-    throw new Error(salitaResult.stderr);
-  }
-
-  const salitaJSON = JSON.parse(salitaResult.stdout);
-  salitaJSON.dependencies.forEach((obj) => {
-    if (obj.isUpdateable) {
-      newRepoPackage.dependencies[obj.name] = obj.after;
-    }
-  });
-
-  /* Write the new repo package.json file. */
-  console.log();
-  console.log('Writing package.json');
-  console.log();
-  const repoJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
-  fs.writeFileSync(`${repoDir}/package.json`, repoJSON);
-
-  /* Run npm install on the repo. */
-  console.log();
-  console.log('Running npm install');
-  console.log();
-  const npmInstallResult = shell.exec(`cd ${repoDir} && npm install`);
-
-  if (npmInstallResult.code !== 0) {
-    throw new Error(npmInstallResult.stderr);
-  }
-
-  /* Run the repo build script. */
-  console.log();
-  console.log('Running npm run build');
-  console.log();
-  const buildResult = shell.exec(`cd ${repoDir} && npm run build`);
-
-  if (buildResult.code !== 0) {
-    throw new Error(buildResult.stderr);
-  }
-
-  /* Run the repo test script. */
-  console.log();
-  console.log('Running npm run test');
-  console.log();
-  const testResult = shell.exec(`cd ${repoDir} && npm run test`);
-
-  if (testResult.code !== 0) {
-    throw new Error(testResult.stderr);
-  }
-
-  /* Add the git changes.* */
-  console.log();
-  console.log('Running git add -A');
-  console.log();
-  const addResult = shell.exec(`cd ${repoDir} && git add -A`);
-
-  if (addResult.code !== 0) {
-    throw new Error(addResult.stderr);
-  }
-
-  /* Commit the git changes. */
-  console.log();
-  console.log('Running git commit');
-  console.log();
-  const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
-  const commitTitle = TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
-  const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
-  const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
-
-  if (commitResult.code !== 0) {
-    throw new Error(commitResult.stderr);
-  }
-
-  /* Show the git diff. */
-  // const diffResult = shell.exec(`cd ${repoDir} && git diff`);
-  //
-  // if (diffResult.code !== 0) {
-  //   throw new Error(diffResult.stderr);
-  // }
-
-  if (!DRY_RUN) {
-    /* Push the commit to GitHub. */
-    console.log();
-    console.log('Running git push');
-    console.log();
-    const pushResult = shell.exec(`cd ${repoDir} && git push`);
-
-    if (pushResult.code !== 0) {
-      throw new Error(pushResult.stderr);
-    }
-
-    /* Publish NPM. */
-    console.log();
-    console.log('Running npm publish');
-    console.log();
-    const publishResult = shell.exec(`cd ${repoDir} && npm publish`);
-
-    if (publishResult.code !== 0) {
-      throw new Error(publishResult.stderr);
-    }
-  }
-
-  /* Publish GitHub release. */
+/**
+ * Authenticate against GitHub and get the API.
+ *
+ * @param {string} username - The login.
+ * @param {string} password - The password.
+ * @returns {Promise<GitHub>} - The API.
+ */
+const getGithubAPI = async (username, password) => {
   console.log();
   console.log('GitHub authentication');
   console.log();
-  const gh = new GitHub({
-    username: GITHUB_LOGIN,
-    password: GITHUB_PASSWORD,
+  const github = new GitHub({
+    username,
+    password,
     auth: 'basic',
   });
 
-  const user = gh.getUser();
-  // console.log(user);
-
-  user.listNotifications({all: true}, (error /* , result, request */) => {
+  await github.getUser().listNotifications({all: true}, (error /* , result, request */) => {
     if (error) {
       throw new Error(error);
     }
 
-    // console.log(result, request);
+    console.log('GitHub authentication OK');
   });
 
-  const remoteRepo = gh.getRepo(GITHUB_REPO_PREFIX, name);
-  console.log(remoteRepo);
+  return github;
+};
 
-  if (GENERATE_RELEASE_NAME) {
+/**
+ * Let's GO!
+ *
+ * @returns {Promise<boolean>} - Async.
+ */
+const letsGo = async () => {
+  /**
+   * GitHub login.
+   *
+   * @type {string}
+   * */
+  const GITHUB_LOGIN = readlineSync.question('Login: ');
+  /**
+   * GitHub password.
+   *
+   * @type {string}
+   * */
+  const GITHUB_PASSWORD = readlineSync.question('Password: ');
+
+  /* Test GitHub authentication.  Only works with basic auth, not 2FA! */
+  const GITHUB_API = await getGithubAPI(GITHUB_LOGIN, GITHUB_PASSWORD);
+  // console.log(GITHUB_API);
+
+  if (DRY_RUN) {
     console.log();
-    console.log('Generating release name');
+    console.log('Dry run');
     console.log();
   }
 
-  const releaseName = GENERATE_RELEASE_NAME ? new Haikunator().haikunate() : '';
+  const projectUpdate = async (project) => {
+    const {name, identifier, regenerator} = project;
+    const repoURL = `${GITHUB_URL_PREFIX}/${name}.git`;
+    console.log();
+    console.log('------------------------------------------------------------');
+    console.log(`Name: ${name}`);
+    console.log('------------------------------------------------------------');
+    console.log();
+    const repoDir = `${TMP}/${name}`;
 
-  if (GENERATE_RELEASE_NAME) {
-    console.log(releaseName);
-  }
+    /* Clone the GitHub repo. */
+    console.log();
+    console.log(`Cloning: ${repoURL}`);
+    console.log();
+    const cloneResult = shell.exec(`git clone ${repoURL} ${repoDir}`);
 
-  if (!DRY_RUN) {
-    await remoteRepo.createRelease(
-      {
-        tag_name: `v${newRepoPackage.version}`,
-        name: releaseName,
-        body: BODY_TEXT,
-      },
-      (error /* , result, request */) => {
-        if (error) {
-          throw new Error(error);
+    if (cloneResult.code !== 0) {
+      throw new Error(cloneResult.stderr);
+    }
+
+    /* Copy the listed files from the template to the repo. */
+    console.log();
+    console.log('Copying ...');
+    console.log();
+    copyFiles.forEach((file) => {
+      /* Requires babel regenerator runtime transform. */
+      if (regenerator && file === '.babelrc') {
+        const regeneratorFile = `${file}.regenerator`;
+        console.log(`File: ${regeneratorFile}`);
+        const copyResult = shell.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
+
+        if (copyResult.code !== 0) {
+          throw new Error(copyResult.stderr);
+        }
+      } else {
+        console.log(`File: ${file}`);
+        const copyResult = shell.cp(`template/${file}`, `${repoDir}/${file}`);
+
+        if (copyResult.code !== 0) {
+          throw new Error(copyResult.stderr);
+        }
+      }
+    });
+
+    /* Get repo package.json and update the information. */
+    console.log();
+    console.log('Updating package.json');
+    console.log();
+    /* eslint-disable-next-line global-require,import/no-dynamic-require */
+    const repoPackage = require(`../${repoDir}/package.json`);
+
+    const modifiedRepoPackage = Object.keys(repoPackage).reduce((obj, key) => {
+      const templateValue = templatePackage[key];
+
+      obj[key] = typeof templateValue === 'undefined' ? repoPackage[key] : templateValue;
+
+      return obj;
+    }, {});
+
+    const newRepoPackage = packageKeyOrder.reduce((obj, key) => {
+      obj[key] = modifiedRepoPackage[key];
+
+      return obj;
+    }, {});
+
+    /* Update the repo dependencies */
+    console.log();
+    console.log('Updating dependencies');
+    console.log();
+    const salitaResult = shell.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
+
+    if (salitaResult.code !== 0) {
+      throw new Error(salitaResult.stderr);
+    }
+
+    const salitaJSON = JSON.parse(salitaResult.stdout);
+    salitaJSON.dependencies.forEach((obj) => {
+      if (obj.isUpdateable) {
+        newRepoPackage.dependencies[obj.name] = obj.after;
+      }
+    });
+
+    /* Write the new repo package.json file. */
+    console.log();
+    console.log('Writing package.json');
+    console.log();
+    const repoJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
+    fs.writeFileSync(`${repoDir}/package.json`, repoJSON);
+
+    const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
+
+    if (describeResult.code !== 0) {
+      throw new Error(describeResult.stderr);
+    }
+
+    const isDirty = describeResult.stdout.includes('-dirty');
+
+    if (!isDirty) {
+      console.log();
+      console.log(`No change, skipping: ${name}`);
+      console.log();
+    }
+
+    if (isDirty) {
+      const semver = new SemVer(newRepoPackage.version).inc(identifier);
+      newRepoPackage.version = semver.toString();
+
+      /* Write the new repo package.json file. */
+      console.log();
+      console.log('Writing package.json');
+      console.log();
+      const repoSemverJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
+      fs.writeFileSync(`${repoDir}/package.json`, repoSemverJSON);
+
+      /* Run npm install on the repo. */
+      console.log();
+      console.log('Running npm install');
+      console.log();
+      const npmInstallResult = shell.exec(`cd ${repoDir} && npm install`);
+
+      if (npmInstallResult.code !== 0) {
+        throw new Error(npmInstallResult.stderr);
+      }
+
+      /* Run the repo build script. */
+      console.log();
+      console.log('Running npm run build');
+      console.log();
+      const buildResult = shell.exec(`cd ${repoDir} && npm run build`);
+
+      if (buildResult.code !== 0) {
+        throw new Error(buildResult.stderr);
+      }
+
+      /* Run the repo test script. */
+      console.log();
+      console.log('Running npm run test');
+      console.log();
+      const testResult = shell.exec(`cd ${repoDir} && npm run test`);
+
+      if (testResult.code !== 0) {
+        throw new Error(testResult.stderr);
+      }
+
+      /* Add the git changes.* */
+      console.log();
+      console.log('Running git add -A');
+      console.log();
+      const addResult = shell.exec(`cd ${repoDir} && git add -A`);
+
+      if (addResult.code !== 0) {
+        throw new Error(addResult.stderr);
+      }
+
+      /* Commit the git changes. */
+      console.log();
+      console.log('Running git commit');
+      console.log();
+      const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
+      const commitTitle = TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
+      const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
+      const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
+
+      if (commitResult.code !== 0) {
+        throw new Error(commitResult.stderr);
+      }
+
+      /* Show the git diff. */
+      // const diffResult = shell.exec(`cd ${repoDir} && git diff`);
+      //
+      // if (diffResult.code !== 0) {
+      //   throw new Error(diffResult.stderr);
+      // }
+
+      if (!DRY_RUN) {
+        /* Push the commit to GitHub. */
+        console.log();
+        console.log('Running git push');
+        console.log();
+        const pushResult = shell.exec(`cd ${repoDir} && git push`);
+
+        if (pushResult.code !== 0) {
+          throw new Error(pushResult.stderr);
         }
 
-        // console.log(result);
-      },
-    );
-  }
+        /* Publish NPM. */
+        console.log();
+        console.log('Running npm publish');
+        console.log();
+        const publishResult = shell.exec(`cd ${repoDir} && npm publish`);
 
-  /* Remove local repo copy. */
+        if (publishResult.code !== 0) {
+          throw new Error(publishResult.stderr);
+        }
+      }
+
+      /* Publish GitHub release. */
+      console.log();
+      console.log('GitHub release');
+      console.log();
+      const remoteRepo = GITHUB_API.getUser().getRepo(GITHUB_REPO_PREFIX, name);
+      console.log(remoteRepo);
+
+      if (GENERATE_RELEASE_NAME) {
+        console.log();
+        console.log('Generating release name');
+        console.log();
+      }
+
+      const releaseName = GENERATE_RELEASE_NAME ? new Haikunator().haikunate() : '';
+
+      if (GENERATE_RELEASE_NAME) {
+        console.log(releaseName);
+      }
+
+      if (!DRY_RUN) {
+        console.log('Creating GitHub release');
+        await remoteRepo.createRelease(
+          {
+            tag_name: `v${newRepoPackage.version}`,
+            name: releaseName,
+            body: BODY_TEXT,
+          },
+          (error /* , result, request */) => {
+            if (error) {
+              throw new Error(error);
+            }
+
+            console.log(' GitHub release created');
+          },
+        );
+      }
+    }
+
+    /* Remove local repo copy. */
+    if (REMOVE_LOCAL_COPY) {
+      console.log();
+      console.log(`Running rm -rf ${repoDir}`);
+      console.log();
+      const rmTmpResult = shell.rm('-rf', repoDir);
+
+      if (rmTmpResult.code !== 0) {
+        throw new Error(rmTmpResult.stderr);
+      }
+    }
+  };
+
+  projects.forEach(projectUpdate);
+
+  /* Remove TMP. */
   if (REMOVE_LOCAL_COPY) {
     console.log();
-    console.log(`Running rm -rf ${repoDir}`);
+    console.log(`Running rm -rf ${TMP}`);
     console.log();
-    const rmTmpResult = shell.rm('-rf', repoDir);
+    const rmTmpResult = shell.rm('-rf', TMP);
 
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);
     }
   }
+
+  /* We finished! */
+  console.log();
+  console.log('Done.');
+  console.log();
+
+  return true;
 };
 
-projects.forEach(projectUpdate);
-
-/* Remove TMP. */
-if (REMOVE_LOCAL_COPY) {
-  console.log();
-  console.log(`Running rm -rf ${TMP}`);
-  console.log();
-  const rmTmpResult = shell.rm('-rf', TMP);
-
-  if (rmTmpResult.code !== 0) {
-    throw new Error(rmTmpResult.stderr);
-  }
-}
-
-/* We finished! */
-console.log();
-console.log('Done.');
-console.log();
+letsGo();
