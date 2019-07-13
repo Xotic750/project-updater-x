@@ -317,14 +317,14 @@ const letsGo = async () => {
    *
    * @type {boolean}
    * */
-  const REMOVE_LOCAL_COPY = readlineSync.question('Remove local (yes)? ').toLocaleString() === 'no';
+  const REMOVE_LOCAL_COPY = readlineSync.question('Remove local (yes)[no]? ').toLocaleString() !== 'no';
 
   /**
    * Do not push or publish.
    *
    * @type {boolean}
    * */
-  const DRY_RUN = readlineSync.question('Dry run (yes)? ').toLocaleString() === 'no';
+  const DRY_RUN = readlineSync.question('Dry run (yes)[no]? ').toLocaleString() !== 'no';
 
   if (DRY_RUN) {
     console.log();
