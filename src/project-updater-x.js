@@ -7,23 +7,11 @@ const Haikunator = require('haikunator');
 const templatePackage = require('../template/package.json');
 
 /**
- * Do not push or publish.
- *
- * @type {boolean}
- * */
-const DRY_RUN = true;
-/**
  * The temporary work directory.
  *
  * @type {string}
  * */
 const TMP = 'tmp';
-/**
- * Remove local copy when completed.
- *
- * @type {boolean}
- * */
-const REMOVE_LOCAL_COPY = true;
 
 /**
  * GitHub repo prefix.
@@ -31,32 +19,20 @@ const REMOVE_LOCAL_COPY = true;
  * @type {string}
  * */
 const GITHUB_REPO_PREFIX = 'Xotic750';
+
 /**
  * The prefix to use with GitHub, clone and push.
  *
  * @type {string}
  * */
 const GITHUB_URL_PREFIX = `git@github.com:${GITHUB_REPO_PREFIX}`;
+
 /**
  * Generate a release name for GitHub releases.
  *
  * @type {boolean}
  * */
 const GENERATE_RELEASE_NAME = true;
-
-/**
- * Text used for title of commit and for GitHub releases.
- * Default is to bookmark the version.
- *
- * @type {string}
- * */
-const TITLE_TEXT = '';
-/**
- * Text used for body of commit and for GitHub releases.
- *
- * @type {string}
- * */
-const BODY_TEXT = 'Test auto build';
 
 /**
  * List of the package.json keys to be written and their order.
@@ -264,6 +240,7 @@ const copyFiles = [
   'jest.config.js',
   'webpack.config.js',
 ];
+
 /**
  * Authenticate against GitHub and get the API.
  *
@@ -304,6 +281,7 @@ const letsGo = async () => {
    * @type {string}
    * */
   const GITHUB_LOGIN = readlineSync.question('Login: ');
+
   /**
    * GitHub password.
    *
@@ -311,9 +289,42 @@ const letsGo = async () => {
    * */
   const GITHUB_PASSWORD = readlineSync.question('Password: ');
 
-  /* Test GitHub authentication.  Only works with basic auth, not 2FA! */
+  /**
+   *  Test GitHub authentication and get API.
+   *
+   * @type {GitHub}
+   */
   const GITHUB_API = await getGithubAPI(GITHUB_LOGIN, GITHUB_PASSWORD);
   // console.log(GITHUB_API);
+
+  /**
+   * Text used for title of commit and for GitHub releases.
+   * Default is to bookmark the version.
+   *
+   * @type {string}
+   * */
+  const TITLE_TEXT = readlineSync.question('Title (:bookmark: vx.x.x)? ');
+
+  /**
+   * Text used for body of commit and for GitHub releases.
+   *
+   * @type {string}
+   * */
+  const BODY_TEXT = readlineSync.question('Body ()? ');
+
+  /**
+   * Remove local copy when completed.
+   *
+   * @type {boolean}
+   * */
+  const REMOVE_LOCAL_COPY = readlineSync.question('Remove local (yes)? ').toLocaleString() === 'no';
+
+  /**
+   * Do not push or publish.
+   *
+   * @type {boolean}
+   * */
+  const DRY_RUN = readlineSync.question('Dry run (yes)? ').toLocaleString() === 'no';
 
   if (DRY_RUN) {
     console.log();
