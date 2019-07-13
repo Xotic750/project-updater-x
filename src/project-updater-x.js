@@ -1,10 +1,16 @@
 const readlineSync = require('readline-sync');
 const fs = require('fs');
+const path = require('path');
 const shell = require('shelljs');
 const SemVer = require('semver');
 const GitHub = require('github-api');
 const Haikunator = require('haikunator');
+const cloneDeep = require('lodash/cloneDeep');
 const templatePackage = require('../template/package.json');
+
+const TERRAFORM = true;
+
+const CHECK_PROJECTS_ONLY = false;
 
 /**
  * The temporary work directory.
@@ -66,10 +72,12 @@ const packageKeyOrder = [
  * @type {Array<object>}
  */
 const projects = [
+  /* Ready projects */
   {
     name: 'delay-promise-x',
     identifier: 'patch',
     regenerator: true,
+    dependencyClashes: ['lodash'],
   },
   {
     name: 'to-string-x',
@@ -219,6 +227,444 @@ const projects = [
     name: 'is-surrogate-pair-x',
     identifier: 'patch',
   },
+
+  /* Terraform projects */
+  {
+    name: 'number-to-decimal-form-string-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'assert-is-function-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'math-sign-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-integer-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-length-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-object-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-filter-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-every-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-map-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-for-each-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-some-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-reduce-right-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-reduce-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-like-slice-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-slice-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-property-key-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'has-own-property-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'assert-is-object-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-define-property-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'math-clamp-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-index-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'property-is-enumerable-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-get-own-property-descriptor-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-regexp-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'truncate-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-integer-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-safe-integer-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-length-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-array-like-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'calculate-from-index-right-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'calculate-from-index-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'number-format-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-uint-24-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'string-pad-start-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'int-to-rgb-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-prototype-of-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-async-function-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-function-name-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-prototype-of-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'assert-is-callable-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'string-quote-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'create-array-fix-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-map-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-set-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'string-includes-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'string-starts-with-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'to-iso-string-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-property-symbols-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-enumerable-property-symbols-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-keys-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-property-names-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-assign-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'find-index-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'find-last-index-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'last-index-of-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'index-of-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-includes-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'has-reflect-support-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'reflect-define-property-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-enumerable-keys-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-define-properties-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-create-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'big-counter-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-array-buffer-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-data-view-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'object-walk-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'define-properties-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'reflect-own-keys-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-non-enumerable-keys-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'bind-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'power-set-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-error-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-function-args-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'shuffle-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'get-own-non-enumerable-property-symbols-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-union-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-difference-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'array-intersection-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'collections-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'inspect-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'deep-equal-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'safe-to-string-x',
+    identifier: 'patch',
+    terraform: true,
+    deprecated: true,
+  },
+  {
+    name: 'error-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'assert-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'util-format-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'cross-console-x',
+    identifier: 'patch',
+    terraform: true,
+  },
+  {
+    name: 'is-plain-object-x',
+    identifier: 'patch',
+    terraform: true,
+  },
 ];
 
 /**
@@ -269,25 +715,50 @@ const getGithubAPI = async (username, password) => {
   return github;
 };
 
+const asyncForEach = async function asyncForEach(array, callback) {
+  return array.reduce(async (promise, item, index) => {
+    // This line will wait for the last async function to finish.
+    // The first iteration uses an already resolved Promise
+    // so, it will immediately continue.
+    await promise;
+
+    return callback(array[index], index, array);
+  }, Promise.resolve());
+};
+
+const getCredentials = function getCredentials() {
+  if (fs.existsSync(path.resolve('credentials.json'))) {
+    /* eslint-disable-next-line global-require */
+    return require('../credentials.json');
+  }
+
+  return {
+    login: readlineSync.question('Login: '),
+    password: readlineSync.question('Password: '),
+  };
+};
+
 /**
  * Let's GO!
  *
  * @returns {Promise<boolean>} - Async.
  */
 const letsGo = async () => {
+  const CREDENTIALS = getCredentials();
+
   /**
    * GitHub login.
    *
    * @type {string}
    * */
-  const GITHUB_LOGIN = readlineSync.question('Login: ');
+  const GITHUB_LOGIN = CREDENTIALS.login;
 
   /**
    * GitHub password.
    *
    * @type {string}
    * */
-  const GITHUB_PASSWORD = readlineSync.question('Password: ');
+  const GITHUB_PASSWORD = CREDENTIALS.password;
 
   /**
    *  Test GitHub authentication and get API.
@@ -303,28 +774,30 @@ const letsGo = async () => {
    *
    * @type {string}
    * */
-  const TITLE_TEXT = readlineSync.question('Title (:bookmark: vx.x.x)? ');
+  const TITLE_TEXT = CHECK_PROJECTS_ONLY ? '' : readlineSync.question('Title (:bookmark: vX.X.X)? ');
 
   /**
    * Text used for body of commit and for GitHub releases.
    *
    * @type {string}
    * */
-  const BODY_TEXT = readlineSync.question('Body ()? ');
+  const BODY_TEXT = CHECK_PROJECTS_ONLY ? '' : readlineSync.question('Body ()? ');
 
   /**
    * Remove local copy when completed.
    *
    * @type {boolean}
    * */
-  const REMOVE_LOCAL_COPY = readlineSync.question('Remove local (yes)[no]? ').toLocaleString() !== 'no';
+  const REMOVE_LOCAL_COPY = CHECK_PROJECTS_ONLY
+    ? false
+    : readlineSync.question('Remove local (yes)[no]? ').toLocaleString() !== 'no';
 
   /**
    * Do not push or publish.
    *
    * @type {boolean}
    * */
-  const DRY_RUN = readlineSync.question('Dry run (yes)[no]? ').toLocaleString() !== 'no';
+  const DRY_RUN = CHECK_PROJECTS_ONLY ? true : readlineSync.question('Dry run (yes)[no]? ').toLocaleString() !== 'no';
 
   if (DRY_RUN) {
     console.log();
@@ -332,237 +805,423 @@ const letsGo = async () => {
     console.log();
   }
 
-  const projectUpdate = async (project) => {
-    const {name, identifier, regenerator} = project;
+  const projectUpdate = async (project, index) => {
+    let isTerraformed = false;
+    const {name, identifier, regenerator, dependencyClashes, terraform, deprecated} = project;
     const repoURL = `${GITHUB_URL_PREFIX}/${name}.git`;
     console.log();
     console.log('------------------------------------------------------------');
     console.log(`Name: ${name}`);
     console.log('------------------------------------------------------------');
     console.log();
+
+    if (deprecated) {
+      console.log();
+      console.log(`Deprecated: ${name} skipping`);
+      console.log();
+    }
+
     const repoDir = `${TMP}/${name}`;
 
-    /* Clone the GitHub repo. */
-    console.log();
-    console.log(`Cloning: ${repoURL}`);
-    console.log();
-    const cloneResult = shell.exec(`git clone ${repoURL} ${repoDir}`);
+    if (!fs.existsSync(path.resolve(repoDir))) {
+      /* Clone the GitHub repo. */
+      console.log();
+      console.log(`Cloning: ${repoURL}`);
+      console.log();
+      const cloneResult = shell.exec(`git clone ${repoURL} ${repoDir}`);
 
-    if (cloneResult.code !== 0) {
-      throw new Error(cloneResult.stderr);
+      if (cloneResult.code !== 0) {
+        throw new Error(cloneResult.stderr);
+      }
     }
 
-    /* Copy the listed files from the template to the repo. */
+    /* Check the integrity and order of projects. */
     console.log();
-    console.log('Copying ...');
+    console.log('Check the integrity and order of projects');
     console.log();
-    copyFiles.forEach((file) => {
-      /* Requires babel regenerator runtime transform. */
-      if (regenerator && file === '.babelrc') {
-        const regeneratorFile = `${file}.regenerator`;
-        console.log(`File: ${regeneratorFile}`);
-        const copyResult = shell.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
-
-        if (copyResult.code !== 0) {
-          throw new Error(copyResult.stderr);
-        }
-      } else {
-        console.log(`File: ${file}`);
-        const copyResult = shell.cp(`template/${file}`, `${repoDir}/${file}`);
-
-        if (copyResult.code !== 0) {
-          throw new Error(copyResult.stderr);
-        }
-      }
+    const projectNames = projects.map((proj) => {
+      return proj.name;
     });
 
-    /* Get repo package.json and update the information. */
-    console.log();
-    console.log('Updating package.json');
-    console.log();
+    const uniqueNames = new Set(projectNames);
+
+    if (uniqueNames.size !== projects.length) {
+      const duplicates = projectNames.reduce((dupes, projectName, idx) => {
+        if (projectNames.indexOf(projectName) !== idx && !dupes.includes(projectName)) {
+          dupes.push(projectName);
+        }
+
+        return dupes;
+      }, []);
+
+      console.log(duplicates);
+
+      throw new Error('projects has duplicates');
+    }
+
     /* eslint-disable-next-line global-require,import/no-dynamic-require */
     const repoPackage = require(`../${repoDir}/package.json`);
+    const toComes = projects.slice(index);
+    Object.keys(repoPackage.dependencies).forEach((dependencyName) => {
+      if (dependencyName.endsWith('-x')) {
+        const isInProjects = projects.find((proj) => {
+          return dependencyName === proj.name;
+        });
 
-    const modifiedRepoPackage = Object.keys(repoPackage).reduce((obj, key) => {
-      const templateValue = templatePackage[key];
+        if (!isInProjects) {
+          throw new Error(`${dependencyName} is missing from projects`);
+        }
 
-      obj[key] = typeof templateValue === 'undefined' ? repoPackage[key] : templateValue;
+        const toCome = toComes.find((proj) => {
+          return dependencyName === proj.name;
+        });
 
-      return obj;
-    }, {});
-
-    const newRepoPackage = packageKeyOrder.reduce((obj, key) => {
-      obj[key] = modifiedRepoPackage[key];
-
-      return obj;
-    }, {});
-
-    /* Update the repo dependencies */
-    console.log();
-    console.log('Updating dependencies');
-    console.log();
-    const salitaResult = shell.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
-
-    if (salitaResult.code !== 0) {
-      throw new Error(salitaResult.stderr);
-    }
-
-    const salitaJSON = JSON.parse(salitaResult.stdout);
-    salitaJSON.dependencies.forEach((obj) => {
-      if (obj.isUpdateable) {
-        newRepoPackage.dependencies[obj.name] = obj.after;
+        if (toCome) {
+          throw new Error(`${name} requires ${toCome.name}`);
+        }
       }
     });
 
-    /* Write the new repo package.json file. */
-    console.log();
-    console.log('Writing package.json');
-    console.log();
-    const repoJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
-    fs.writeFileSync(`${repoDir}/package.json`, repoJSON);
+    if (!CHECK_PROJECTS_ONLY) {
+      /* Perform terraforming of old projects */
+      if (TERRAFORM && terraform) {
+        const libDir = `${repoDir}/lib`;
+        const testsDir = `${repoDir}/tests`;
 
-    const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
+        if (fs.existsSync(path.resolve(libDir)) && fs.existsSync(path.resolve(testsDir))) {
+          console.log();
+          console.log('Terraforming');
+          console.log();
+          isTerraformed = true;
 
-    if (describeResult.code !== 0) {
-      throw new Error(describeResult.stderr);
-    }
+          const testsNewDir = `${repoDir}/__tests__`;
+          console.log();
+          console.log(`Make dir: ${testsNewDir}`);
+          console.log();
+          const mdTestsDirResult = shell.mkdir(testsNewDir);
 
-    const isDirty = describeResult.stdout.includes('-dirty');
+          if (mdTestsDirResult.code !== 0) {
+            throw new Error(mdTestsDirResult.stderr);
+          }
 
-    if (!isDirty) {
+          const testFile = `${testsDir}/spec/test.js`;
+          console.log();
+          console.log(`Copy: ${testFile}`);
+          console.log();
+          const cpTestFileResult = shell.cp(testFile, `${testsNewDir}/${name}.test.js`);
+
+          if (cpTestFileResult.code !== 0) {
+            throw new Error(cpTestFileResult.stderr);
+          }
+
+          const srcDir = `${repoDir}/src`;
+          console.log();
+          console.log(`Make dir: ${srcDir}`);
+          console.log();
+          const mdSrcDirResult = shell.mkdir(srcDir);
+
+          if (mdSrcDirResult.code !== 0) {
+            throw new Error(mdSrcDirResult.stderr);
+          }
+
+          const indexFile = `${repoDir}/index.js`;
+          console.log();
+          console.log(`Copy: ${indexFile}`);
+          console.log();
+          const cpIndexFileResult = shell.cp(indexFile, `${srcDir}/${name}.js`);
+
+          if (cpIndexFileResult.code !== 0) {
+            throw new Error(cpIndexFileResult.stderr);
+          }
+
+          const terraformRemoves = [
+            'lib',
+            'tests',
+            '.editorconfig',
+            '.eslintignore',
+            '.eslintrc.json',
+            '.gitignore',
+            '.npmignore',
+            '.nvmrc',
+            '.travis.yml',
+            'badges.html',
+            'index.js',
+            'package-lock.json',
+          ];
+
+          terraformRemoves.forEach((removeName) => {
+            const removePath = `${repoDir}/${removeName}`;
+            console.log();
+            console.log(`Running rm -rf ${removePath}`);
+            console.log();
+            const rmPathResult = shell.rm('-rf', removePath);
+
+            if (rmPathResult.code !== 0) {
+              throw new Error(rmPathResult.stderr);
+            }
+          });
+        }
+      }
+
+      /* Copy the listed files from the template to the repo. */
       console.log();
-      console.log(`No change, skipping: ${name}`);
+      console.log('Copying ...');
       console.log();
-    }
+      copyFiles.forEach((file) => {
+        /* Requires babel regenerator runtime transform. */
+        if (regenerator && file === '.babelrc') {
+          const regeneratorFile = `${file}.regenerator`;
+          console.log(`File: ${regeneratorFile}`);
+          const copyResult = shell.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
 
-    if (isDirty) {
-      const semver = new SemVer(newRepoPackage.version).inc(identifier);
-      newRepoPackage.version = semver.toString();
+          if (copyResult.code !== 0) {
+            throw new Error(copyResult.stderr);
+          }
+        } else {
+          console.log(`File: ${file}`);
+          const copyResult = shell.cp(`template/${file}`, `${repoDir}/${file}`);
+
+          if (copyResult.code !== 0) {
+            throw new Error(copyResult.stderr);
+          }
+        }
+      });
+
+      /* Get repo package.json and update the information. */
+      console.log();
+      console.log('Updating package.json');
+      console.log();
+      const modifiedRepoPackage = packageKeyOrder.reduce((obj, key) => {
+        const templateValue = templatePackage[key];
+
+        obj[key] = cloneDeep(typeof templateValue === 'undefined' ? repoPackage[key] : templateValue);
+
+        return obj;
+      }, {});
+
+      const newRepoPackage = packageKeyOrder.reduce((obj, key) => {
+        obj[key] = cloneDeep(modifiedRepoPackage[key]);
+
+        return obj;
+      }, {});
+
+      /* Update the repo dependencies */
+      console.log();
+      console.log('Updating dependencies');
+      console.log();
+      const salitaResult = shell.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
+
+      if (salitaResult.code !== 0) {
+        throw new Error(salitaResult.stderr);
+      }
+
+      const salitaJSON = JSON.parse(salitaResult.stdout);
+      salitaJSON.dependencies.forEach((dependency) => {
+        if (dependency.isUpdateable) {
+          newRepoPackage.dependencies[dependency.name] = dependency.after;
+        }
+
+        if (TERRAFORM && dependency.name === 'safe-to-string-x') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependency.name];
+
+            newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
+          } else {
+            throw new Error(`${name} has deprecated safe-to-string-x`);
+          }
+        }
+      });
+
+      /* Remove any dependency/devDependency clashes */
+      if (dependencyClashes) {
+        console.log(`Removing clashes from ${name}`);
+        dependencyClashes.forEach((dependencyClash) => {
+          console.log(`Clash: ${dependencyClash}`);
+          delete newRepoPackage.devDependencies[dependencyClash];
+        });
+      }
 
       /* Write the new repo package.json file. */
       console.log();
-      console.log('Writing package.json');
+      console.log(`Writing ${name} package.json`);
       console.log();
-      const repoSemverJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
-      fs.writeFileSync(`${repoDir}/package.json`, repoSemverJSON);
+      const repoJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
+      fs.writeFileSync(`${repoDir}/package.json`, repoJSON);
 
-      /* Run npm install on the repo. */
-      console.log();
-      console.log('Running npm install');
-      console.log();
-      const npmInstallResult = shell.exec(`cd ${repoDir} && npm install`);
+      const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
 
-      if (npmInstallResult.code !== 0) {
-        throw new Error(npmInstallResult.stderr);
+      if (describeResult.code !== 0) {
+        throw new Error(describeResult.stderr);
       }
 
-      /* Run the repo build script. */
-      console.log();
-      console.log('Running npm run build');
-      console.log();
-      const buildResult = shell.exec(`cd ${repoDir} && npm run build`);
+      const isDirty = describeResult.stdout.includes('-dirty');
 
-      if (buildResult.code !== 0) {
-        throw new Error(buildResult.stderr);
-      }
-
-      /* Run the repo test script. */
-      console.log();
-      console.log('Running npm run test');
-      console.log();
-      const testResult = shell.exec(`cd ${repoDir} && npm run test`);
-
-      if (testResult.code !== 0) {
-        throw new Error(testResult.stderr);
-      }
-
-      /* Add the git changes.* */
-      console.log();
-      console.log('Running git add -A');
-      console.log();
-      const addResult = shell.exec(`cd ${repoDir} && git add -A`);
-
-      if (addResult.code !== 0) {
-        throw new Error(addResult.stderr);
-      }
-
-      /* Commit the git changes. */
-      console.log();
-      console.log('Running git commit');
-      console.log();
-      const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
-      const commitTitle = TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
-      const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
-      const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
-
-      if (commitResult.code !== 0) {
-        throw new Error(commitResult.stderr);
-      }
-
-      /* Show the git diff. */
-      // const diffResult = shell.exec(`cd ${repoDir} && git diff`);
-      //
-      // if (diffResult.code !== 0) {
-      //   throw new Error(diffResult.stderr);
-      // }
-
-      if (!DRY_RUN) {
-        /* Push the commit to GitHub. */
+      if (!isDirty) {
         console.log();
-        console.log('Running git push');
+        console.log(`No change, skipping: ${name}`);
         console.log();
-        const pushResult = shell.exec(`cd ${repoDir} && git push`);
+      }
 
-        if (pushResult.code !== 0) {
-          throw new Error(pushResult.stderr);
+      if (isDirty) {
+        if (!isTerraformed) {
+          const semver = new SemVer(newRepoPackage.version).inc(identifier);
+          newRepoPackage.version = semver.toString();
+          console.log();
+          console.log(`Update ${name} version using ${identifier} from ${repoPackage.version} to ${newRepoPackage.version}`);
+          console.log();
+
+          /* Write the new repo package.json file. */
+          console.log();
+          console.log(`Writing ${name} package.json`);
+          console.log();
+          const repoSemverJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
+          fs.writeFileSync(`${repoDir}/package.json`, repoSemverJSON);
         }
 
-        /* Publish NPM. */
+        /* Run npm install on the repo. */
         console.log();
-        console.log('Running npm publish');
+        console.log('Running npm install');
         console.log();
-        const publishResult = shell.exec(`cd ${repoDir} && npm publish`);
+        const npmInstallResult = shell.exec(`cd ${repoDir} && npm install`);
 
-        if (publishResult.code !== 0) {
-          throw new Error(publishResult.stderr);
+        if (npmInstallResult.code !== 0) {
+          throw new Error(npmInstallResult.stderr);
         }
-      }
 
-      /* Publish GitHub release. */
-      console.log();
-      console.log('GitHub release');
-      console.log();
-      const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
-      console.log(remoteRepo);
-
-      if (GENERATE_RELEASE_NAME) {
+        /* Run the repo lint-fic script. */
         console.log();
-        console.log('Generating release name');
+        console.log('Running npm run lint-fix');
         console.log();
-      }
+        const lintFixResult = shell.exec(`cd ${repoDir} && npm run lint-fix`);
 
-      const releaseName = GENERATE_RELEASE_NAME ? new Haikunator().haikunate() : '';
+        if ((!isTerraformed && lintFixResult.code !== 0) || (isTerraformed && lintFixResult.code > 1)) {
+          throw new Error(lintFixResult.stderr);
+        }
 
-      if (GENERATE_RELEASE_NAME) {
-        console.log(releaseName);
-      }
+        if (!isTerraformed) {
+          /* Run the repo build script. */
+          console.log();
+          console.log('Running npm run build');
+          console.log();
+          const buildResult = shell.exec(`cd ${repoDir} && npm run build`);
 
-      if (!DRY_RUN) {
-        console.log('Creating GitHub release');
-        await remoteRepo.createRelease(
-          {
-            tag_name: `v${newRepoPackage.version}`,
-            name: releaseName,
-            body: BODY_TEXT,
-          },
-          (error /* , result, request */) => {
-            if (error) {
-              throw new Error(error);
+          if (buildResult.code !== 0) {
+            throw new Error(buildResult.stderr);
+          }
+
+          /* Run the repo test script. */
+          console.log();
+          console.log('Running npm run test');
+          console.log();
+          const testResult = shell.exec(`cd ${repoDir} && npm run test`);
+
+          if (testResult.code !== 0) {
+            throw new Error(testResult.stderr);
+          }
+        }
+
+        /* Add the git changes */
+        console.log();
+        console.log('Running git add -A');
+        console.log();
+        const addResult = shell.exec(`cd ${repoDir} && git add -A`);
+
+        if (addResult.code !== 0) {
+          throw new Error(addResult.stderr);
+        }
+
+        /* Add the package-lock.json */
+        console.log();
+        console.log('Running git add package-lock.json');
+        console.log();
+        const addLockResult = shell.exec(`cd ${repoDir} && git add --force package-lock.json`);
+
+        if (addLockResult.code !== 0) {
+          throw new Error(addLockResult.stderr);
+        }
+
+        /* Commit the git changes. */
+        console.log();
+        console.log('Running git commit');
+        console.log();
+        const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
+        const commitTitle = isTerraformed ? 'Terraformed' : TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
+        const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
+        const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
+
+        if (commitResult.code !== 0) {
+          throw new Error(commitResult.stderr);
+        }
+
+        /* Show the git diff. */
+        // const diffResult = shell.exec(`cd ${repoDir} && git diff`);
+        //
+        // if (diffResult.code !== 0) {
+        //   throw new Error(diffResult.stderr);
+        // }
+
+        if (!DRY_RUN) {
+          /* Push the commit to GitHub. */
+          console.log();
+          console.log('Running git push');
+          console.log();
+          const pushResult = shell.exec(`cd ${repoDir} && git push`);
+
+          if (pushResult.code !== 0) {
+            throw new Error(pushResult.stderr);
+          }
+
+          if (!isTerraformed) {
+            /* Publish NPM. */
+            console.log();
+            console.log('Running npm publish');
+            console.log();
+            const publishResult = shell.exec(`cd ${repoDir} && npm publish`);
+
+            if (publishResult.code !== 0) {
+              throw new Error(publishResult.stderr);
             }
+          }
+        }
 
-            console.log(' GitHub release created');
-          },
-        );
+        if (!isTerraformed) {
+          /* Publish GitHub release. */
+          console.log();
+          console.log('GitHub release');
+          console.log();
+          const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
+          console.log(remoteRepo);
+
+          if (GENERATE_RELEASE_NAME) {
+            console.log();
+            console.log('Generating release name');
+            console.log();
+          }
+
+          const releaseName = GENERATE_RELEASE_NAME ? new Haikunator().haikunate() : '';
+
+          if (GENERATE_RELEASE_NAME) {
+            console.log(releaseName);
+          }
+
+          if (!DRY_RUN) {
+            console.log('Creating GitHub release');
+            await remoteRepo.createRelease(
+              {
+                tag_name: `v${newRepoPackage.version}`,
+                name: releaseName,
+                body: BODY_TEXT,
+              },
+              (error /* , result, request */) => {
+                if (error) {
+                  throw new Error(error);
+                }
+
+                console.log('GitHub release created');
+              },
+            );
+          }
+        }
       }
     }
 
@@ -579,7 +1238,7 @@ const letsGo = async () => {
     }
   };
 
-  projects.forEach(projectUpdate);
+  await asyncForEach(projects, projectUpdate);
 
   /* Remove TMP. */
   if (REMOVE_LOCAL_COPY) {

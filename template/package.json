@@ -96,7 +96,6 @@
     "npm": "6.4.1"
   },
   "browserslist": [
-    "> 1%",
-    "Explorer >= 9"
+    "> 1%"
   ]
 }
