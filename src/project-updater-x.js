@@ -851,6 +851,8 @@ const letsGo = async () => {
       console.log();
       console.log(`Deprecated: ${name} skipping`);
       console.log();
+
+      return;
     }
 
     if (!fs.existsSync(path.resolve(repoDir))) {
