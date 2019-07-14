@@ -21,6 +21,7 @@
     "lint-fix": "npm run lint -- --fix",
     "report": "npm run build -- --env.report",
     "report:dev": "npm run build:dev -- --env.report",
+    "salita": "salita",
     "security": "npm audit",
     "security-fix": "npm run security -- fix",
     "start": "node src/project-updater-x.js"
@@ -38,6 +39,7 @@
     "haikunator": "^2.1.1",
     "lodash": "^4.17.14",
     "readline-sync": "^1.4.9",
+    "salita": "^0.11.1",
     "semver": "^6.2.0",
     "shelljs": "^0.8.3"
   },
