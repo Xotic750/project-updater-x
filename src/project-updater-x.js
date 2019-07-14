@@ -892,7 +892,6 @@ const letsGo = async () => {
           console.log();
           console.log('Terraforming');
           console.log();
-          isTerraformed = true;
 
           const testsNewDir = `${repoDir}/__tests__`;
           console.log();
@@ -967,7 +966,6 @@ const letsGo = async () => {
         const uglifyConfig = `${repoDir}/.uglifyjsrc.json`;
 
         if (fs.existsSync(path.resolve(uglifyConfig))) {
-          isTerraformed = true;
           console.log();
           console.log(`Running rm -rf ${uglifyConfig}`);
           console.log();
@@ -977,6 +975,8 @@ const letsGo = async () => {
             throw new Error(rmUglifyResult.stderr);
           }
         }
+
+        isTerraformed = true;
       }
 
       /* Copy the listed files from the template to the repo. */
@@ -1110,11 +1110,11 @@ const letsGo = async () => {
         console.log();
         const lintFixResult = shell.exec(`cd ${repoDir} && npm run lint-fix`);
 
-        if ((!isTerraformed && lintFixResult.code !== 0) || (isTerraformed && lintFixResult.code > 1)) {
+        if ((!terraform && lintFixResult.code !== 0) || (terraform && lintFixResult.code > 1)) {
           throw new Error(lintFixResult.stderr);
         }
 
-        if (!isTerraformed) {
+        if (!terraform) {
           /* Run the repo build script. */
           console.log();
           console.log('Running npm run build');
