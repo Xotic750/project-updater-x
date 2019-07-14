@@ -889,11 +889,7 @@ const letsGo = async () => {
         const testsDir = `${repoDir}/tests`;
         const uglifyConfig = `${repoDir}/.uglifyjsrc.json`;
 
-        if (
-          fs.existsSync(path.resolve(libDir)) ||
-          fs.existsSync(path.resolve(testsDir)) ||
-          fs.existsSync(path.resolve(uglifyConfig))
-        ) {
+        if (fs.existsSync(path.resolve(libDir)) && fs.existsSync(path.resolve(testsDir))) {
           console.log();
           console.log('Terraforming');
           console.log();
@@ -966,6 +962,17 @@ const letsGo = async () => {
               throw new Error(rmPathResult.stderr);
             }
           });
+        }
+
+        if (fs.existsSync(path.resolve(uglifyConfig))) {
+          console.log();
+          console.log(`Running rm -rf ${uglifyConfig}`);
+          console.log();
+          const rmUglifyResult = shell.rm('-rf', uglifyConfig);
+
+          if (rmUglifyResult.code !== 0) {
+            throw new Error(rmUglifyResult.stderr);
+          }
         }
       }
 
