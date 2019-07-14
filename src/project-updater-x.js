@@ -269,19 +269,16 @@ const projects = [
   {
     name: 'is-safe-integer-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'is-length-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 1,
   },
   {
     name: 'math-clamp-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 1,
   },
   {
