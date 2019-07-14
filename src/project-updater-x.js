@@ -8,6 +8,8 @@ const Haikunator = require('haikunator');
 const cloneDeep = require('lodash/cloneDeep');
 const templatePackage = require('../template/package.json');
 
+const NEW_ORDER = [];
+const SHOW_NEW_ORDER = true;
 const SemVerLevel = 'patch';
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
 
@@ -894,7 +896,12 @@ const letsGo = async () => {
     /* eslint-disable-next-line global-require,import/no-dynamic-require */
     const repoPackage = require(`../${repoDir}/package.json`);
     const toComes = projects.slice(index);
-    Object.keys(repoPackage.dependencies).forEach((dependencyName) => {
+    const dependencyKeys = Object.keys(repoPackage.dependencies);
+    const newProject = cloneDeep(project);
+    newProject.dependenciesCount = dependencyKeys.length;
+    NEW_ORDER.push(newProject);
+
+    dependencyKeys.forEach((dependencyName) => {
       if (dependencyName.endsWith('-x')) {
         const isInProjects = projects.find((proj) => {
           return dependencyName === proj.name;
@@ -1326,6 +1333,22 @@ const letsGo = async () => {
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);
     }
+  }
+
+  if (SHOW_NEW_ORDER) {
+    const newProjectsOrder = NEW_ORDER.sort((a, b) => {
+      if (a.dependenciesCount < b.dependenciesCount) {
+        return -1;
+      }
+
+      if (a.dependenciesCount > b.dependenciesCount) {
+        return 1;
+      }
+
+      return 0;
+    });
+
+    console.log(JSON.stringify(newProjectsOrder, null, 2));
   }
 
   /* We finished! */
