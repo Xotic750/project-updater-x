@@ -1165,7 +1165,7 @@ const letsGo = async () => {
         const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
         const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
 
-        if (commitResult.code !== 0) {
+        if (commitResult.code !== 0 && !commitResult.stdout.includes('nothing to commit')) {
           throw new Error(commitResult.stderr);
         }
 
