@@ -306,19 +306,16 @@ const projects = [
   {
     name: 'to-length-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'to-object-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'array-like-slice-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
