@@ -104,13 +104,6 @@ const projects = [
   {
     name: 'has-reflect-support-x',
     identifier: SemVerLevel,
-    terraform: true,
-    dependenciesCount: 0,
-  },
-  {
-    name: 'create-array-fix-x',
-    identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 0,
   },
   {
