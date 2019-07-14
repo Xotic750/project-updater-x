@@ -967,6 +967,7 @@ const letsGo = async () => {
         const uglifyConfig = `${repoDir}/.uglifyjsrc.json`;
 
         if (fs.existsSync(path.resolve(uglifyConfig))) {
+          isTerraformed = true;
           console.log();
           console.log(`Running rm -rf ${uglifyConfig}`);
           console.log();
