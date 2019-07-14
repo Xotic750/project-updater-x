@@ -67,3 +67,4 @@ __tests__/coverage/
 
 tmp/
 credentials.json
+last.json

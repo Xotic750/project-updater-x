@@ -8,6 +8,12 @@ const Haikunator = require('haikunator');
 const cloneDeep = require('lodash/cloneDeep');
 const templatePackage = require('../template/package.json');
 
+const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
+
+if (CONTINUE_FROM) {
+  console.log(`Continuing from: ${CONTINUE_FROM}`);
+}
+
 const TERRAFORM = true;
 
 const CHECK_PROJECTS_ONLY = false;
@@ -805,9 +811,34 @@ const letsGo = async () => {
     console.log();
   }
 
+  let pleaseContinue = Boolean(CONTINUE_FROM);
+  let isContinueFrom = false;
   const projectUpdate = async (project, index) => {
     let isTerraformed = false;
     const {name, identifier, regenerator, dependencyClashes, terraform, deprecated} = project;
+    const repoDir = `${TMP}/${name}`;
+
+    if (pleaseContinue && !isContinueFrom) {
+      if (CONTINUE_FROM === name) {
+        isContinueFrom = true;
+        pleaseContinue = false;
+        console.log();
+        console.log(`Running rm -rf ${repoDir}`);
+        console.log();
+        const rmTmpResult = shell.rm('-rf', repoDir);
+
+        if (rmTmpResult.code !== 0) {
+          throw new Error(rmTmpResult.stderr);
+        }
+      } else {
+        console.log();
+        console.log(`Will continue: ${name} skipping`);
+        console.log();
+
+        return;
+      }
+    }
+
     const repoURL = `${GITHUB_URL_PREFIX}/${name}.git`;
     console.log();
     console.log('------------------------------------------------------------');
@@ -820,8 +851,6 @@ const letsGo = async () => {
       console.log(`Deprecated: ${name} skipping`);
       console.log();
     }
-
-    const repoDir = `${TMP}/${name}`;
 
     if (!fs.existsSync(path.resolve(repoDir))) {
       /* Clone the GitHub repo. */
@@ -1252,6 +1281,8 @@ const letsGo = async () => {
         throw new Error(rmTmpResult.stderr);
       }
     }
+
+    fs.writeFileSync('last.json', JSON.stringify({name}, nill, 2));
   };
 
   await asyncForEach(projects, projectUpdate);
