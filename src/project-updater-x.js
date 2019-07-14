@@ -887,7 +887,6 @@ const letsGo = async () => {
       if (TERRAFORM && terraform) {
         const libDir = `${repoDir}/lib`;
         const testsDir = `${repoDir}/tests`;
-        const uglifyConfig = `${repoDir}/.uglifyjsrc.json`;
 
         if (fs.existsSync(path.resolve(libDir)) && fs.existsSync(path.resolve(testsDir))) {
           console.log();
@@ -963,6 +962,9 @@ const letsGo = async () => {
             }
           });
         }
+
+        /* Remove missed files for terraformed */
+        const uglifyConfig = `${repoDir}/.uglifyjsrc.json`;
 
         if (fs.existsSync(path.resolve(uglifyConfig))) {
           console.log();
