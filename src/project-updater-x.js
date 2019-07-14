@@ -1317,7 +1317,7 @@ const letsGo = async () => {
   /* Remove last.json */
   if (fs.existsSync(path.resolve('last.json'))) {
     console.log();
-    console.log('Removing rm last.json');
+    console.log('Running rm last.json');
     console.log();
     const rmTmpResult = shell.rm('last.json');
 
