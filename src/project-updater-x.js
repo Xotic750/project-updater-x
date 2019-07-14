@@ -1099,6 +1099,20 @@ const letsGo = async () => {
         throw new Error(describeResult.stderr);
       }
 
+      /* Replace deprecated package name in source file */
+      if (TERRAFORM && terraform && Object.keys(newRepoPackage.dependencies).includes('to-string-symbols-supported-x')) {
+        console.log();
+        console.log(`Replacing deprecated safe-to-string-x ${name} source file`);
+        console.log();
+        const srcFile = `${repoDir}/src/${name}.js`;
+        const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+
+        if (projectSource.includes('safe-to-string-x')) {
+          const src = projectSource.replace('safe-to-string-x', 'to-string-symbols-supported-x');
+          fs.writeFileSync(path.resolve(srcFile), src);
+        }
+      }
+
       const isDirty = describeResult.stdout.includes('-dirty');
 
       if (!isDirty) {
