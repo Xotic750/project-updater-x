@@ -1094,12 +1094,6 @@ const letsGo = async () => {
       const repoJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
       fs.writeFileSync(`${repoDir}/package.json`, repoJSON);
 
-      const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
-
-      if (describeResult.code !== 0) {
-        throw new Error(describeResult.stderr);
-      }
-
       /* Replace deprecated package name in source file */
       if (TERRAFORM && terraform && Object.keys(newRepoPackage.dependencies).includes('to-string-symbols-supported-x')) {
         console.log();
@@ -1112,6 +1106,12 @@ const letsGo = async () => {
           const src = projectSource.replace('safe-to-string-x', 'to-string-symbols-supported-x');
           fs.writeFileSync(path.resolve(srcFile), src);
         }
+      }
+
+      const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
+
+      if (describeResult.code !== 0) {
+        throw new Error(describeResult.stderr);
       }
 
       const isDirty = describeResult.stdout.includes('-dirty');
