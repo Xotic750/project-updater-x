@@ -9,7 +9,7 @@ const cloneDeep = require('lodash/cloneDeep');
 const templatePackage = require('../template/package.json');
 
 const NEW_ORDER = [];
-const SHOW_NEW_ORDER = true;
+const SHOW_NEW_ORDER = false;
 const SemVerLevel = 'patch';
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
 
@@ -81,598 +81,713 @@ const packageKeyOrder = [
  * @type {Array<object>}
  */
 const projects = [
-  /* Ready projects */
   {
-    name: 'delay-promise-x',
+    name: 'nan-x',
     identifier: SemVerLevel,
-    regenerator: true,
-    dependencyClashes: ['lodash'],
-  },
-  {
-    name: 'to-string-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-nan-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'same-value-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'same-value-zero-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-nil-x',
-    identifier: SemVerLevel,
+    dependenciesCount: 0,
   },
   {
     name: 'infinity-x',
     identifier: SemVerLevel,
-  },
-  {
-    name: 'is-finite-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'nan-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'to-boolean-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-truthy-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-falsey-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'attempt-x',
-    identifier: SemVerLevel,
+    dependenciesCount: 0,
   },
   {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
-  },
-  {
-    name: 'has-symbol-support-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'to-string-tag-x',
-    identifier: SemVerLevel,
+    dependenciesCount: 0,
   },
   {
     name: 'has-boxed-string-x',
     identifier: SemVerLevel,
-  },
-  {
-    name: 'to-string-symbols-supported-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'split-if-boxed-bug-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-array-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'require-object-coercible-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'require-coercible-to-string-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'regexp-escape-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'has-to-string-tag-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'white-space-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'trim-left-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'trim-right-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'trim-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'replace-comments-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'normalize-space-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-function-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-object-like-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'parse-int-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'to-primitive-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'to-number-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-node-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'modulo-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'is-surrogate-pair-x',
-    identifier: SemVerLevel,
-  },
-
-  /* Terraform projects */
-  {
-    name: 'number-to-decimal-form-string-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'assert-is-function-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'math-sign-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-integer-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-length-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-object-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-filter-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-every-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-map-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-for-each-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-some-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-reduce-right-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-reduce-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-like-slice-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-slice-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-property-key-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'has-own-property-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'assert-is-object-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'object-define-property-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'math-clamp-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-index-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'property-is-enumerable-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'object-get-own-property-descriptor-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-regexp-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'truncate-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-integer-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-safe-integer-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-length-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-array-like-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'calculate-from-index-right-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'calculate-from-index-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'number-format-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-uint-24-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'string-pad-start-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'int-to-rgb-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'get-prototype-of-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-async-function-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'get-function-name-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-prototype-of-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'assert-is-callable-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'string-quote-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'create-array-fix-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-map-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'is-set-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'string-includes-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'string-starts-with-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'to-iso-string-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'get-own-property-symbols-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'get-own-enumerable-property-symbols-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'object-keys-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'get-own-property-names-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'object-assign-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'find-index-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'find-last-index-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'last-index-of-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'index-of-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'array-includes-x',
-    identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
     name: 'has-reflect-support-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'reflect-define-property-x',
+    name: 'create-array-fix-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'get-own-enumerable-keys-x',
+    name: 'is-nan-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'object-define-properties-x',
+    name: 'modulo-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'object-create-x',
+    name: 'is-nil-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'big-counter-x',
+    name: 'to-boolean-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'is-array-buffer-x',
+    name: 'is-node-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'is-data-view-x',
+    name: 'attempt-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'object-walk-x',
+    name: 'to-string-tag-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'define-properties-x',
+    name: 'white-space-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 0,
   },
   {
-    name: 'reflect-own-keys-x',
+    name: 'same-value-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 1,
   },
   {
-    name: 'get-own-non-enumerable-keys-x',
+    name: 'same-value-zero-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 1,
   },
   {
-    name: 'bind-x',
+    name: 'to-string-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 1,
   },
   {
-    name: 'power-set-x',
+    name: 'require-object-coercible-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 1,
   },
   {
-    name: 'is-error-x',
+    name: 'require-coercible-to-string-x',
     identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 2,
   },
   {
-    name: 'get-function-args-x',
+    name: 'regexp-escape-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'is-falsey-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'is-truthy-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'is-surrogate-pair-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'is-finite-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'trim-left-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'trim-right-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'trim-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'parse-int-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'has-symbol-support-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'has-to-string-tag-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'normalize-space-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'replace-comments-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'is-function-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 8,
+  },
+  {
+    name: 'to-primitive-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'to-number-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'math-sign-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'to-integer-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'is-integer-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'is-safe-integer-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'is-length-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'math-clamp-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 1,
+  },
+  {
+    name: 'delay-promise-x',
+    identifier: SemVerLevel,
+    regenerator: true,
+    dependencyClashes: ['lodash'],
+    dependenciesCount: 1,
+  },
+  {
+    name: 'is-object-like-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'to-string-symbols-supported-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'split-if-boxed-bug-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'to-length-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'to-object-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'array-like-slice-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'is-array-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'array-slice-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
   },
   {
     name: 'shuffle-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 2,
   },
   {
-    name: 'get-own-non-enumerable-property-symbols-x',
+    name: 'number-to-decimal-form-string-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'string-quote-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'assert-is-object-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'to-property-key-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'property-is-enumerable-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 2,
+  },
+  {
+    name: 'assert-is-function-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'array-map-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'array-every-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'array-filter-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'array-for-each-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'is-array-like-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'power-set-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'get-prototype-of-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'is-error-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'has-own-property-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'get-own-property-symbols-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'get-own-enumerable-property-symbols-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'object-define-property-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 9,
+  },
+  {
+    name: 'is-index-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'object-get-own-property-descriptor-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 10,
+  },
+  {
+    name: 'is-regexp-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'object-keys-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 10,
+  },
+  {
+    name: 'get-own-enumerable-keys-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'string-pad-start-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'to-uint-24-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'int-to-rgb-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'calculate-from-index-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'find-index-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'index-of-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 10,
+  },
+  {
+    name: 'array-includes-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 9,
+  },
+  {
+    name: 'array-reduce-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
   },
   {
     name: 'array-union-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'is-prototype-of-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'assert-is-callable-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 3,
+  },
+  {
+    name: 'array-reduce-right-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'object-define-properties-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'big-counter-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'bind-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'get-function-name-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'get-own-non-enumerable-property-symbols-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'array-some-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
   },
   {
     name: 'array-difference-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 5,
   },
   {
     name: 'array-intersection-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'is-set-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'is-map-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'is-array-buffer-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
   },
   {
     name: 'collections-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 22,
+  },
+  {
+    name: 'is-async-function-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'is-data-view-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'get-own-property-names-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'object-assign-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 11,
+  },
+  {
+    name: 'reflect-own-keys-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'string-includes-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'string-starts-with-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'to-iso-string-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
   },
   {
     name: 'inspect-x',
     identifier: SemVerLevel,
     terraform: true,
-  },
-  {
-    name: 'deep-equal-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'safe-to-string-x',
-    identifier: SemVerLevel,
-    terraform: true,
-    deprecated: true,
-  },
-  {
-    name: 'error-x',
-    identifier: SemVerLevel,
-    terraform: true,
-  },
-  {
-    name: 'assert-x',
-    identifier: SemVerLevel,
-    terraform: true,
+    dependenciesCount: 56,
   },
   {
     name: 'util-format-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 4,
   },
   {
-    name: 'cross-console-x',
+    name: 'calculate-from-index-right-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'find-last-index-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 5,
+  },
+  {
+    name: 'get-own-non-enumerable-keys-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'get-function-args-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'define-properties-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'object-create-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 6,
+  },
+  {
+    name: 'object-walk-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 7,
+  },
+  {
+    name: 'deep-equal-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 19,
+  },
+  {
+    name: 'truncate-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 8,
+  },
+  {
+    name: 'error-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 20,
+  },
+  {
+    name: 'assert-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 8,
+  },
+  {
+    name: 'number-format-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 8,
+  },
+  {
+    name: 'reflect-define-property-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 9,
   },
   {
     name: 'is-plain-object-x',
     identifier: SemVerLevel,
     terraform: true,
+    dependenciesCount: 9,
+  },
+  {
+    name: 'last-index-of-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 9,
+  },
+  {
+    name: 'cross-console-x',
+    identifier: SemVerLevel,
+    terraform: true,
+    dependenciesCount: 19,
   },
 ];
 
@@ -799,7 +914,7 @@ const letsGo = async () => {
    * */
   const REMOVE_LOCAL_COPY = CHECK_PROJECTS_ONLY
     ? false
-    : readlineSync.question('Remove local (yes)[no]? ').toLocaleString() !== 'no';
+    : readlineSync.question('Remove local [yes](no)? ').toLocaleString() === 'yes';
 
   /**
    * Do not push or publish.
@@ -825,21 +940,13 @@ const letsGo = async () => {
       if (CONTINUE_FROM === name) {
         isContinueFrom = true;
         pleaseContinue = false;
-        console.log();
-        console.log(`Running rm -rf ${repoDir}`);
-        console.log();
-        const rmTmpResult = shell.rm('-rf', repoDir);
-
-        if (rmTmpResult.code !== 0) {
-          throw new Error(rmTmpResult.stderr);
-        }
       } else {
         console.log();
         console.log(`Will continue: ${name} skipping`);
         console.log();
-
-        return;
       }
+
+      return;
     }
 
     const repoURL = `${GITHUB_URL_PREFIX}/${name}.git`;
@@ -897,9 +1004,12 @@ const letsGo = async () => {
     const repoPackage = require(`../${repoDir}/package.json`);
     const toComes = projects.slice(index);
     const dependencyKeys = Object.keys(repoPackage.dependencies);
-    const newProject = cloneDeep(project);
-    newProject.dependenciesCount = dependencyKeys.length;
-    NEW_ORDER.push(newProject);
+
+    if (SHOW_NEW_ORDER) {
+      const newProject = cloneDeep(project);
+      newProject.dependenciesCount = dependencyKeys.length;
+      NEW_ORDER.push(newProject);
+    }
 
     dependencyKeys.forEach((dependencyName) => {
       if (dependencyName.endsWith('-x')) {
