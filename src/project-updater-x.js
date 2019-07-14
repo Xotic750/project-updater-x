@@ -1287,12 +1287,24 @@ const letsGo = async () => {
 
   await asyncForEach(projects, projectUpdate);
 
-  /* Remove TMP. */
+  /* Remove TMP */
   if (REMOVE_LOCAL_COPY) {
     console.log();
     console.log(`Running rm -rf ${TMP}`);
     console.log();
     const rmTmpResult = shell.rm('-rf', TMP);
+
+    if (rmTmpResult.code !== 0) {
+      throw new Error(rmTmpResult.stderr);
+    }
+  }
+
+  /* Remove last.json */
+  if (fs.existsSync(path.resolve('last.json'))) {
+    console.log();
+    console.log('Running rm last.json');
+    console.log();
+    const rmTmpResult = shell.rm('last.json');
 
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);
