@@ -1282,7 +1282,7 @@ const letsGo = async () => {
       }
     }
 
-    fs.writeFileSync('last.json', JSON.stringify({name}, nill, 2));
+    fs.writeFileSync('last.json', JSON.stringify({name}, null, 2));
   };
 
   await asyncForEach(projects, projectUpdate);
