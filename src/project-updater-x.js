@@ -254,19 +254,16 @@ const projects = [
   {
     name: 'math-sign-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'to-integer-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'is-integer-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
