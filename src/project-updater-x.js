@@ -331,7 +331,6 @@ const projects = [
   {
     name: 'shuffle-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
