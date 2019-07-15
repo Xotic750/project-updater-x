@@ -497,13 +497,11 @@ const projects = [
   {
     name: 'is-prototype-of-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'assert-is-callable-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
@@ -1370,7 +1368,7 @@ const letsGo = async () => {
     fs.writeFileSync('last.json', JSON.stringify({name}, null, 2));
 
     console.log();
-    console.log(`Waiting 5 seconds before continuing`);
+    console.log('Waiting 5 seconds before continuing');
     console.log();
     /* eslint-disable-next-line no-use-extend-native/no-use-extend-native */
     await Promise.delay(5000);
