@@ -336,25 +336,21 @@ const projects = [
   {
     name: 'number-to-decimal-form-string-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'string-quote-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'assert-is-object-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'to-property-key-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
