@@ -427,31 +427,26 @@ const projects = [
   {
     name: 'is-index-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'object-get-own-property-descriptor-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 10,
   },
   {
     name: 'is-regexp-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'object-keys-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 10,
   },
   {
     name: 'get-own-enumerable-keys-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
