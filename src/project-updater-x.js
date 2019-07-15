@@ -472,19 +472,16 @@ const projects = [
   {
     name: 'find-index-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'index-of-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 10,
   },
   {
     name: 'array-includes-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 9,
   },
   {
