@@ -35,6 +35,7 @@
     "url": "https://github.com/Xotic750/project-updater-x/issues"
   },
   "dependencies": {
+    "bluebird": "^3.5.5",
     "github-api": "^3.2.2",
     "haikunator": "^2.1.1",
     "lodash": "^4.17.14",

@@ -6,6 +6,7 @@ const SemVer = require('semver');
 const GitHub = require('github-api');
 const Haikunator = require('haikunator');
 const cloneDeep = require('lodash/cloneDeep');
+const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
 const NEW_ORDER = [];
@@ -1388,6 +1389,12 @@ const letsGo = async () => {
     }
 
     fs.writeFileSync('last.json', JSON.stringify({name}, null, 2));
+
+    console.log();
+    console.log(`Waiting 5 seconds before continuing`);
+    console.log();
+    /* eslint-disable-next-line no-use-extend-native/no-use-extend-native */
+    await Promise.delay(5000);
   };
 
   await asyncForEach(projects, projectUpdate);
