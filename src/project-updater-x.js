@@ -487,13 +487,11 @@ const projects = [
   {
     name: 'array-reduce-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'array-union-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
