@@ -371,25 +371,21 @@ const projects = [
   {
     name: 'array-every-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
     name: 'array-filter-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
     name: 'array-for-each-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
     name: 'is-array-like-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
