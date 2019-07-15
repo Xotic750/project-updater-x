@@ -392,43 +392,36 @@ const projects = [
   {
     name: 'power-set-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'get-prototype-of-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'is-error-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'has-own-property-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'get-own-property-symbols-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'get-own-enumerable-property-symbols-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'object-define-property-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 9,
   },
   {
