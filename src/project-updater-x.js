@@ -326,7 +326,6 @@ const projects = [
   {
     name: 'array-slice-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
