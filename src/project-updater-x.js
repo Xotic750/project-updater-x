@@ -356,19 +356,16 @@ const projects = [
   {
     name: 'property-is-enumerable-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 2,
   },
   {
     name: 'assert-is-function-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 3,
   },
   {
     name: 'array-map-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
