@@ -19,7 +19,7 @@ if (CONTINUE_FROM) {
 }
 
 const TERRAFORM = true;
-const RUN_CJS_TO_ES6 = true;
+const RUN_CJS_TO_ES6 = false;
 
 const CHECK_PROJECTS_ONLY = false;
 
@@ -513,7 +513,6 @@ const projects = [
   {
     name: 'object-define-properties-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
@@ -1106,6 +1105,18 @@ const letsGo = async () => {
           {
             find: /it\((.+?), function\(\) {\s+(?!expect\.assertions)/,
             replace: 'it($1, function() {\nexpect.assertions(1);',
+          },
+          {
+            find: 'toBeFalsy()',
+            replace: 'toBe(false)',
+          },
+          {
+            find: 'toBeTruthy()',
+            replace: 'toBe(true)',
+          },
+          {
+            find: '} catch (ignore) {}',
+            replace: '} catch (ignore) {\n// empty\n}',
           },
         ];
 
