@@ -528,13 +528,11 @@ const projects = [
   {
     name: 'get-function-name-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'get-own-non-enumerable-property-symbols-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
@@ -1089,8 +1087,8 @@ const letsGo = async () => {
             replace: '*/',
           },
           {
-            find: '} catch (ignore) {}',
-            replace: '} catch (ignore) {\n// empty\n}',
+            find: '// eslint-disable-next-line no-invalid-this',
+            replace: '// eslint-disable-next-line babel/no-invalid-this',
           },
         ];
 
@@ -1170,6 +1168,10 @@ const letsGo = async () => {
             find: 'expect.assertions(1)/',
             replace: 'expect.assertions(1)',
           },
+          {
+            find: /if \(typeof module === 'object' && module.exports\) {[\s\S]+?} else {[\s\S]+?}/,
+            replace: '',
+          },
         ];
 
         let projectTestSrc = projectTestSource;
@@ -1246,37 +1248,45 @@ const letsGo = async () => {
             if (addCopyFileResult.code !== 0) {
               throw new Error(addCopyFileResult.stderr);
             }
+          }
 
-            if (!terraform) {
-              const srcFile = `${repoDir}/__tests__/${name}.test.js`;
-              const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+          const srcFile = `${repoDir}/__tests__/${name}.test.js`;
+          const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
 
-              const removeComments = [
-                '/* eslint-disable-next-line compat/compat */',
-                '/* eslint-disable-next-line lodash/prefer-noop */',
-                '/* eslint-disable-next-line compat/compat */',
-                '/* eslint-disable-next-line prefer-rest-params */',
-                '/* eslint-disable-next-line jest/no-hooks */',
-                '/* eslint-disable-next-line no-void */',
-                '/* eslint-disable-next-line compat/compat,no-void */',
-                '/* eslint-disable-next-line no-void,compat/compat */',
-                '/* eslint-disable-next-line no-void,lodash/prefer-noop */',
-                '// eslint-disable-next-line no-new-func',
-              ];
+          const removeComments = [
+            '/* eslint-disable-next-line compat/compat */',
+            '/* eslint-disable-next-line lodash/prefer-noop */',
+            '/* eslint-disable-next-line compat/compat */',
+            '/* eslint-disable-next-line prefer-rest-params */',
+            '/* eslint-disable-next-line jest/no-hooks */',
+            '/* eslint-disable-next-line no-void */',
+            '/* eslint-disable-next-line compat/compat,no-void */',
+            '/* eslint-disable-next-line no-void,compat/compat */',
+            '/* eslint-disable-next-line no-void,lodash/prefer-noop */',
+            '/* eslint-disable-next-line no-prototype-builtins */',
+            '// eslint-disable-next-line no-new-func',
+            '// eslint-disable-next-line no-prototype-builtins',
+          ];
 
-              let testSrc = projectSource;
+          let testSrc = projectSource;
 
-              removeComments.forEach((removeComment) => {
-                let hasComment = testSrc.includes(removeComment);
+          removeComments.forEach((removeComment) => {
+            let hasComment = testSrc.includes(removeComment);
 
-                while (hasComment) {
-                  testSrc = testSrc.replace(removeComment, '');
-                  hasComment = testSrc.includes(removeComment);
-                }
-              });
-
-              fs.writeFileSync(path.resolve(srcFile), testSrc);
+            if (hasComment) {
+              console.log('Removing: ', removeComment);
             }
+
+            while (hasComment) {
+              testSrc = testSrc.replace(removeComment, '');
+              console.log('Removed');
+              hasComment = testSrc.includes(removeComment);
+            }
+          });
+
+          if (testSrc !== projectSource) {
+            fs.writeFileSync(path.resolve(srcFile), testSrc);
+            console.log('Replaced');
           }
         }
       });
