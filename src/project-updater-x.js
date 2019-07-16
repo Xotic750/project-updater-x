@@ -19,6 +19,7 @@ if (CONTINUE_FROM) {
 }
 
 const TERRAFORM = true;
+const RUN_CJS_TO_ES6 = true;
 
 const CHECK_PROJECTS_ONLY = false;
 
@@ -507,7 +508,6 @@ const projects = [
   {
     name: 'array-reduce-right-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
@@ -758,6 +758,7 @@ const copyFiles = [
   '.travis.yml',
   'jest.config.js',
   'webpack.config.js',
+  '__tests__/.eslintrc.js',
 ];
 
 /**
@@ -1074,6 +1075,72 @@ const letsGo = async () => {
           }
         }
 
+        /* Replacements in the test file */
+        console.log();
+        console.log('Running test file replacements');
+        console.log();
+        const srcFile = `${repoDir}/__tests__/${name}.test.js`;
+        const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+
+        const replacements = [
+          {
+            find: 'toThrow();',
+            replace: 'toThrowErrorMatchingSnapshot();',
+          },
+          {
+            find: 'jasmine.createSpy().andReturn',
+            replace: 'jest.fn().mockReturnValue',
+          },
+          {
+            find: 'spy.calls[0].args',
+            replace: 'spy',
+          },
+          {
+            find: /expect\(spy\).toStrictEqual(\[(.+?)]);/,
+            replace: 'expect(spy).toHaveBeenCalledWith($1);',
+          },
+          {
+            find: 'jasmine.createSpy();',
+            replace: 'jest.fn();',
+          },
+          {
+            find: /it\((.+?), function\(\) {\s+(?!expect\.assertions)/,
+            replace: 'it($1, function() {\nexpect.assertions(1);',
+          },
+        ];
+
+        let testSrc = projectSource;
+
+        replacements.forEach((replacement) => {
+          const {find, replace} = replacement;
+          let hasFind = typeof find === 'string' ? testSrc.includes(find) : find.test(testSrc);
+
+          if (hasFind) {
+            console.log('Replacing: ', find, replace);
+          }
+
+          while (hasFind) {
+            testSrc = testSrc.replace(find, replace);
+            console.log('Replaced');
+            hasFind = typeof find === 'string' ? testSrc.includes(find) : find.test(testSrc);
+          }
+        });
+
+        if (projectSource !== testSrc) {
+          console.log();
+          console.log(`Writing test file: ${srcFile}`);
+          console.log();
+          fs.writeFileSync(path.resolve(srcFile), testSrc);
+        }
+
+        if (RUN_CJS_TO_ES6) {
+          /* cjs-to-es6 */
+          console.log();
+          console.log(`Running cjs-to-es6 ${repoDir}/src`);
+          console.log();
+          shell.exec(`cd ${repoDir} && cjs-to-es6 src`);
+        }
+
         isTerraformed = true;
       }
 
@@ -1093,10 +1160,60 @@ const letsGo = async () => {
           }
         } else {
           console.log(`File: ${file}`);
-          const copyResult = shell.cp(`template/${file}`, `${repoDir}/${file}`);
+          const destination = `${repoDir}/${file}`;
+          let runAdd = false;
+
+          if (!fs.existsSync(path.resolve(destination))) {
+            runAdd = true;
+          }
+
+          const copyResult = shell.cp(`template/${file}`, destination);
 
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
+          }
+
+          if (runAdd) {
+            /* Add the new file to git */
+            console.log();
+            console.log(`Running git add ${file}`);
+            console.log();
+            const addCopyFileResult = shell.exec(`cd ${repoDir} && git add ${file}`);
+
+            if (addCopyFileResult.code !== 0) {
+              throw new Error(addCopyFileResult.stderr);
+            }
+
+            if (!terraform) {
+              const srcFile = `${repoDir}/__tests__/${name}.test.js`;
+              const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+
+              const removeComments = [
+                '/* eslint-disable-next-line compat/compat */',
+                '/* eslint-disable-next-line lodash/prefer-noop */',
+                '/* eslint-disable-next-line compat/compat */',
+                '/* eslint-disable-next-line prefer-rest-params */',
+                '/* eslint-disable-next-line jest/no-hooks */',
+                '/* eslint-disable-next-line no-void */',
+                '/* eslint-disable-next-line compat/compat,no-void */',
+                '/* eslint-disable-next-line no-void,compat/compat */',
+                '/* eslint-disable-next-line no-void,lodash/prefer-noop */',
+                '// eslint-disable-next-line no-new-func',
+              ];
+
+              let testSrc = projectSource;
+
+              removeComments.forEach((removeComment) => {
+                let hasComment = testSrc.includes(removeComment);
+
+                while (hasComment) {
+                  testSrc = testSrc.replace(removeComment, '');
+                  hasComment = testSrc.includes(removeComment);
+                }
+              });
+
+              fs.writeFileSync(path.resolve(srcFile), testSrc);
+            }
           }
         }
       });
@@ -1365,7 +1482,7 @@ const letsGo = async () => {
       }
     }
 
-    fs.writeFileSync('last.json', JSON.stringify({name}, null, 2));
+    fs.writeFileSync('last.json', `${JSON.stringify({name}, null, 2)}\n`);
 
     console.log();
     console.log('Waiting 5 seconds before continuing');
