@@ -518,13 +518,11 @@ const projects = [
   {
     name: 'big-counter-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'bind-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
@@ -1074,14 +1072,60 @@ const letsGo = async () => {
           }
         }
 
+        /* Replacements in the src file */
+        console.log();
+        console.log('Running src file replacements');
+        console.log();
+        const srcFile = `${repoDir}/src/${name}.js`;
+        const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+
+        const replacements = [
+          {
+            find: /\/\*\*\s+?\*\s+?@file[\s\S]+?\*\//,
+            replace: '',
+          },
+          {
+            find: /\* @example[\s\S]+?\*\//,
+            replace: '*/',
+          },
+          {
+            find: '} catch (ignore) {}',
+            replace: '} catch (ignore) {\n// empty\n}',
+          },
+        ];
+
+        let projectSrc = projectSource;
+
+        replacements.forEach((replacement) => {
+          const {find, replace} = replacement;
+          let hasFind = typeof find === 'string' ? projectSrc.includes(find) : find.test(projectSrc);
+
+          if (hasFind) {
+            console.log('Replacing: ', find, replace);
+          }
+
+          while (hasFind) {
+            projectSrc = projectSrc.replace(find, replace);
+            console.log('Replaced');
+            hasFind = typeof find === 'string' ? projectSrc.includes(find) : find.test(projectSrc);
+          }
+        });
+
+        if (projectSource !== projectSrc) {
+          console.log();
+          console.log(`Writing test file: ${srcFile}`);
+          console.log();
+          fs.writeFileSync(path.resolve(srcFile), projectSrc);
+        }
+
         /* Replacements in the test file */
         console.log();
         console.log('Running test file replacements');
         console.log();
-        const srcFile = `${repoDir}/__tests__/${name}.test.js`;
-        const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+        const srcTestFile = `${repoDir}/__tests__/${name}.test.js`;
+        const projectTestSource = fs.readFileSync(path.resolve(srcTestFile), 'utf8');
 
-        const replacements = [
+        const replacementsTest = [
           {
             find: 'toThrow();',
             replace: 'toThrowErrorMatchingSnapshot();',
@@ -1103,7 +1147,7 @@ const letsGo = async () => {
             replace: 'jest.fn();',
           },
           {
-            find: /it\((.+?), function\(\) {\s+(?!expect\.assertions)/,
+            find: /it\((.+?), function\(\) {\s+(?:!expect\.assertions)/,
             replace: 'it($1, function() {\nexpect.assertions(1);',
           },
           {
@@ -1118,30 +1162,38 @@ const letsGo = async () => {
             find: '} catch (ignore) {}',
             replace: '} catch (ignore) {\n// empty\n}',
           },
+          {
+            find: /expect\.assertions\(1\);\s+expect\.assertions\(1\);/,
+            replace: 'expect.assertions(1);',
+          },
+          {
+            find: 'expect.assertions(1)/',
+            replace: 'expect.assertions(1)',
+          },
         ];
 
-        let testSrc = projectSource;
+        let projectTestSrc = projectTestSource;
 
-        replacements.forEach((replacement) => {
+        replacementsTest.forEach((replacement) => {
           const {find, replace} = replacement;
-          let hasFind = typeof find === 'string' ? testSrc.includes(find) : find.test(testSrc);
+          let hasFind = typeof find === 'string' ? projectTestSrc.includes(find) : find.test(projectTestSrc);
 
           if (hasFind) {
             console.log('Replacing: ', find, replace);
           }
 
           while (hasFind) {
-            testSrc = testSrc.replace(find, replace);
+            projectTestSrc = projectTestSrc.replace(find, replace);
             console.log('Replaced');
-            hasFind = typeof find === 'string' ? testSrc.includes(find) : find.test(testSrc);
+            hasFind = typeof find === 'string' ? projectTestSrc.includes(find) : find.test(projectTestSrc);
           }
         });
 
-        if (projectSource !== testSrc) {
+        if (projectTestSource !== projectTestSrc) {
           console.log();
-          console.log(`Writing test file: ${srcFile}`);
+          console.log(`Writing test file: ${srcTestFile}`);
           console.log();
-          fs.writeFileSync(path.resolve(srcFile), testSrc);
+          fs.writeFileSync(path.resolve(srcTestFile), projectTestSrc);
         }
 
         if (RUN_CJS_TO_ES6) {
