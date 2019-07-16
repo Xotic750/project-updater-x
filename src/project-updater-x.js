@@ -538,37 +538,31 @@ const projects = [
   {
     name: 'array-some-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
     name: 'array-difference-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'array-intersection-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'is-set-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'is-map-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'is-array-buffer-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
