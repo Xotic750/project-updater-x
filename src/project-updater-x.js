@@ -598,25 +598,21 @@ const projects = [
   {
     name: 'reflect-own-keys-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'string-includes-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'string-starts-with-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'to-iso-string-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
