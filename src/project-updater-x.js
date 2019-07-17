@@ -566,9 +566,13 @@ const projects = [
     dependenciesCount: 5,
   },
   {
+    name: 'object-create-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 6,
+  },
+  {
     name: 'collections-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 22,
   },
   {
@@ -657,12 +661,6 @@ const projects = [
   },
   {
     name: 'define-properties-x',
-    identifier: SemVerLevel,
-    terraform: true,
-    dependenciesCount: 6,
-  },
-  {
-    name: 'object-create-x',
     identifier: SemVerLevel,
     terraform: true,
     dependenciesCount: 6,
@@ -1303,6 +1301,52 @@ const letsGo = async () => {
         return obj;
       }, {});
 
+      Object.keys(newRepoPackage.dependencies).forEach((dependencyKey) => {
+        console.log(dependencyKey);
+
+        if (TERRAFORM && dependencyKey === 'safe-to-string-x') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+
+            newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
+          } else {
+            throw new Error(`${name} has deprecated safe-to-string-x`);
+          }
+        }
+
+        if (TERRAFORM && dependencyKey === 'validate.io-undefined') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+          } else {
+            throw new Error(`${name} has deprecated validate.io-undefined`);
+          }
+        }
+
+        if (TERRAFORM && dependencyKey === 'is-falsey-x') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+          } else {
+            throw new Error(`${name} has deprecated is-falsey-x`);
+          }
+        }
+
+        if (TERRAFORM && dependencyKey === 'is-truthy-x') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+          } else {
+            throw new Error(`${name} has deprecated is-truthy-x`);
+          }
+        }
+
+        if (TERRAFORM && dependencyKey === 'max-safe-integer') {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+          } else {
+            throw new Error(`${name} has deprecated max-safe-integer`);
+          }
+        }
+      });
+
       /* Update the repo dependencies */
       console.log();
       console.log('Updating dependencies');
@@ -1317,16 +1361,6 @@ const letsGo = async () => {
       salitaJSON.dependencies.forEach((dependency) => {
         if (dependency.isUpdateable) {
           newRepoPackage.dependencies[dependency.name] = dependency.after;
-        }
-
-        if (TERRAFORM && dependency.name === 'safe-to-string-x') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependency.name];
-
-            newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
-          } else {
-            throw new Error(`${name} has deprecated safe-to-string-x`);
-          }
         }
       });
 
@@ -1376,11 +1410,13 @@ const letsGo = async () => {
 
       if (isDirty) {
         if (!isTerraformed) {
-          const semver = new SemVer(newRepoPackage.version).inc(identifier);
-          newRepoPackage.version = semver.toString();
-          console.log();
-          console.log(`Update ${name} version using ${identifier} from ${repoPackage.version} to ${newRepoPackage.version}`);
-          console.log();
+          if (!DRY_RUN) {
+            const semver = new SemVer(newRepoPackage.version).inc(identifier);
+            newRepoPackage.version = semver.toString();
+            console.log();
+            console.log(`Update ${name} version using ${identifier} from ${repoPackage.version} to ${newRepoPackage.version}`);
+            console.log();
+          }
 
           /* Write the new repo package.json file. */
           console.log();
