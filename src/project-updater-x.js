@@ -578,25 +578,21 @@ const projects = [
   {
     name: 'is-async-function-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'is-data-view-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'get-own-property-names-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'object-assign-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 11,
   },
   {
