@@ -1310,7 +1310,7 @@ const letsGo = async () => {
 
             newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
           } else {
-            throw new Error(`${name} has deprecated safe-to-string-x`);
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
           }
         }
 
@@ -1318,7 +1318,7 @@ const letsGo = async () => {
           if (terraform) {
             delete newRepoPackage.dependencies[dependencyKey];
           } else {
-            throw new Error(`${name} has deprecated validate.io-undefined`);
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
           }
         }
 
@@ -1326,7 +1326,7 @@ const letsGo = async () => {
           if (terraform) {
             delete newRepoPackage.dependencies[dependencyKey];
           } else {
-            throw new Error(`${name} has deprecated is-falsey-x`);
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
           }
         }
 
@@ -1334,7 +1334,7 @@ const letsGo = async () => {
           if (terraform) {
             delete newRepoPackage.dependencies[dependencyKey];
           } else {
-            throw new Error(`${name} has deprecated is-truthy-x`);
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
           }
         }
 
@@ -1342,7 +1342,15 @@ const letsGo = async () => {
           if (terraform) {
             delete newRepoPackage.dependencies[dependencyKey];
           } else {
-            throw new Error(`${name} has deprecated max-safe-integer`);
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
+          }
+        }
+
+        if (TERRAFORM && dependencyKey.startsWith('lodash.')) {
+          if (terraform) {
+            delete newRepoPackage.dependencies[dependencyKey];
+          } else {
+            throw new Error(`${name} has deprecated ${dependencyKey}`);
           }
         }
       });
