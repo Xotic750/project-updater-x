@@ -700,6 +700,11 @@ const projects = [
     identifier: SemVerLevel,
     dependenciesCount: 19,
   },
+  {
+    name: 'enumify-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 6,
+  },
 ];
 
 /**
