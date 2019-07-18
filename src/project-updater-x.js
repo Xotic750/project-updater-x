@@ -678,31 +678,26 @@ const projects = [
   {
     name: 'number-format-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 8,
   },
   {
     name: 'reflect-define-property-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 9,
   },
   {
     name: 'is-plain-object-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 9,
   },
   {
     name: 'last-index-of-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 9,
   },
   {
     name: 'cross-console-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 19,
   },
 ];
