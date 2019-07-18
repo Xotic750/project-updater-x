@@ -628,61 +628,51 @@ const projects = [
   {
     name: 'calculate-from-index-right-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
     name: 'find-last-index-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 5,
   },
   {
     name: 'get-own-non-enumerable-keys-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'get-function-args-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'define-properties-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 6,
   },
   {
     name: 'object-walk-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 7,
   },
   {
     name: 'deep-equal-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 19,
   },
   {
     name: 'truncate-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 8,
   },
   {
     name: 'error-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 20,
   },
   {
     name: 'assert-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 8,
   },
   {
