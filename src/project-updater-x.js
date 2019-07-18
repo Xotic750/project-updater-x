@@ -705,6 +705,18 @@ const projects = [
     identifier: SemVerLevel,
     dependenciesCount: 6,
   },
+  {
+    name: '@xotic750/color',
+    identifier: SemVerLevel,
+    dependencyClashes: ['lodash'],
+    dependenciesCount: 3,
+  },
+  {
+    name: '@xotic750/colorable',
+    identifier: SemVerLevel,
+    dependencyClashes: ['lodash'],
+    dependenciesCount: 2,
+  },
 ];
 
 /**
