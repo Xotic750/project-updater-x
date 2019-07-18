@@ -623,7 +623,6 @@ const projects = [
   {
     name: 'util-format-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 4,
   },
   {
