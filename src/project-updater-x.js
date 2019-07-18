@@ -618,7 +618,6 @@ const projects = [
   {
     name: 'inspect-x',
     identifier: SemVerLevel,
-    terraform: true,
     dependenciesCount: 56,
   },
   {
