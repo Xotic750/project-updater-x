@@ -663,7 +663,7 @@ const projects = [
   {
     name: 'is-deep-strict-equal-x',
     identifier: SemVerLevel,
-    dependenciesCount: NaN,
+    dependenciesCount: 30,
   },
   {
     name: 'truncate-x',
