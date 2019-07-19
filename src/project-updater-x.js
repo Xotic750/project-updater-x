@@ -716,6 +716,7 @@ const projects = [
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
     dependenciesCount: 2,
+    devDependencies: ['colors.css'],
   },
 ];
 
@@ -862,7 +863,8 @@ const letsGo = async () => {
   let isContinueFrom = false;
   const projectUpdate = async (project, index) => {
     let isTerraformed = false;
-    const {name, identifier, regenerator, dependencyClashes, terraform, deprecated} = project;
+    const {name: repoName, identifier, regenerator, dependencyClashes, terraform, deprecated, devDependencies} = project;
+    const name = repoName.replace('@xotic750/', '');
     const repoDir = `${TMP}/${name}`;
 
     if (pleaseContinue && !isContinueFrom) {
@@ -1424,6 +1426,20 @@ const letsGo = async () => {
           console.log();
           const repoSemverJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
           fs.writeFileSync(`${repoDir}/package.json`, repoSemverJSON);
+        }
+
+        if (devDependencies) {
+          /* Run npm install on the repo. */
+          console.log();
+          console.log('Running npm install --save-dev');
+          console.log();
+          devDependencies.forEach((devDependency) => {
+            const npmDevInstallResult = shell.exec(`cd ${repoDir} && npm install --save-dev ${devDependency}`);
+
+            if (npmDevInstallResult.code !== 0) {
+              throw new Error(npmDevInstallResult.stderr);
+            }
+          });
         }
 
         /* Run npm install on the repo. */
