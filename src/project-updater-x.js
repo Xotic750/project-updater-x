@@ -67,6 +67,7 @@ const packageKeyOrder = [
   'files',
   'module',
   'main',
+  'bin',
   'scripts',
   'license',
   'repository',
@@ -723,6 +724,12 @@ const projects = [
     dependenciesCount: 2,
     devDependencies: ['colors.css'],
   },
+  {
+    name: 'replace-x',
+    identifier: SemVerLevel,
+    dependencyClashes: ['lodash'],
+    dependenciesCount: 5,
+  },
 ];
 
 /**
@@ -909,6 +916,16 @@ const letsGo = async () => {
 
       if (cloneResult.code !== 0) {
         throw new Error(cloneResult.stderr);
+      }
+    } else {
+      /* Pull the GitHub repo. */
+      console.log();
+      console.log(`Pulling: ${repoURL}`);
+      console.log();
+      const pullResult = shell.exec(`cd ${repoDir} && git pull`);
+
+      if (pullResult.code !== 0) {
+        throw new Error(pullResult.stderr);
       }
     }
 
@@ -1215,6 +1232,16 @@ const letsGo = async () => {
             throw new Error(copyResult.stderr);
           }
         } else {
+          if (name === 'replace-x') {
+            const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
+
+            if (skipThese.includes(file)) {
+              console.log(`Skipping file: ${file}`);
+
+              return;
+            }
+          }
+
           console.log(`File: ${file}`);
           const destination = `${repoDir}/${file}`;
           let runAdd = false;
@@ -1287,6 +1314,14 @@ const letsGo = async () => {
       console.log('Updating package.json');
       console.log();
       const modifiedRepoPackage = packageKeyOrder.reduce((obj, key) => {
+        if (name === 'replace-x') {
+          if (key === 'scripts' || key === 'browserslist' || key === 'files') {
+            obj[key] = cloneDeep(repoPackage[key]);
+
+            return obj;
+          }
+        }
+
         const templateValue = templatePackage[key];
 
         obj[key] = cloneDeep(typeof templateValue === 'undefined' ? repoPackage[key] : templateValue);
