@@ -730,6 +730,11 @@ const projects = [
     dependencyClashes: ['lodash'],
     dependenciesCount: 5,
   },
+  {
+    name: 'module-boilerplate-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 0,
+  },
 ];
 
 /**
@@ -1232,7 +1237,15 @@ const letsGo = async () => {
             throw new Error(copyResult.stderr);
           }
         } else {
-          if (name === 'replace-x') {
+          if (name === 'module-boilerplate-x') {
+            const skipThese = ['.gitignore'];
+
+            if (skipThese.includes(file)) {
+              console.log(`Skipping file: ${file}`);
+
+              return;
+            }
+          } else if (name === 'replace-x') {
             const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
 
             if (skipThese.includes(file)) {
@@ -1338,53 +1351,45 @@ const letsGo = async () => {
       Object.keys(newRepoPackage.dependencies).forEach((dependencyKey) => {
         console.log(dependencyKey);
 
-        if (TERRAFORM && dependencyKey === 'safe-to-string-x') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
+        if (TERRAFORM) {
+          if (TERRAFORM && dependencyKey === 'safe-to-string-x') {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
 
-            newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
-          }
-        }
-
-        if (TERRAFORM && dependencyKey === 'validate.io-undefined') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
-          }
-        }
-
-        if (TERRAFORM && dependencyKey === 'is-falsey-x') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
-          }
-        }
-
-        if (TERRAFORM && dependencyKey === 'is-truthy-x') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
-          }
-        }
-
-        if (TERRAFORM && dependencyKey === 'max-safe-integer') {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
-          }
-        }
-
-        if (TERRAFORM && dependencyKey.startsWith('lodash.')) {
-          if (terraform) {
-            delete newRepoPackage.dependencies[dependencyKey];
-          } else {
-            throw new Error(`${name} has deprecated ${dependencyKey}`);
+              newRepoPackage.dependencies['to-string-symbols-supported-x'] = '^2.0.2';
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
+          } else if (dependencyKey === 'validate.io-undefined') {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
+          } else if (dependencyKey === 'is-falsey-x') {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
+          } else if (dependencyKey === 'is-truthy-x') {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
+          } else if (dependencyKey === 'max-safe-integer') {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
+          } else if (dependencyKey.startsWith('lodash.')) {
+            if (terraform) {
+              delete newRepoPackage.dependencies[dependencyKey];
+            } else {
+              throw new Error(`${name} has deprecated ${dependencyKey}`);
+            }
           }
         }
       });
@@ -1575,7 +1580,7 @@ const letsGo = async () => {
             throw new Error(pushResult.stderr);
           }
 
-          if (!isTerraformed) {
+          if (!isTerraformed && name !== 'module-boilerplate-x') {
             /* Publish NPM. */
             console.log();
             console.log('Running npm publish');
