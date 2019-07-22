@@ -290,6 +290,11 @@ const projects = [
     dependenciesCount: 1,
   },
   {
+    name: 'to-safe-integer-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 2,
+  },
+  {
     name: 'delay-promise-x',
     identifier: SemVerLevel,
     regenerator: true,
