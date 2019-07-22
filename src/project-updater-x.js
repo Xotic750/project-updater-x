@@ -85,6 +85,11 @@ const packageKeyOrder = [
  */
 const projects = [
   {
+    name: 'module-boilerplate-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 0,
+  },
+  {
     name: 'nan-x',
     identifier: SemVerLevel,
     dependenciesCount: 0,
@@ -729,11 +734,6 @@ const projects = [
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
     dependenciesCount: 5,
-  },
-  {
-    name: 'module-boilerplate-x',
-    identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
 ];
 
