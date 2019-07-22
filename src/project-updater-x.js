@@ -1237,15 +1237,7 @@ const letsGo = async () => {
             throw new Error(copyResult.stderr);
           }
         } else {
-          if (name === 'module-boilerplate-x') {
-            const skipThese = ['.gitignore'];
-
-            if (skipThese.includes(file)) {
-              console.log(`Skipping file: ${file}`);
-
-              return;
-            }
-          } else if (name === 'replace-x') {
+          if (name === 'replace-x') {
             const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
 
             if (skipThese.includes(file)) {
@@ -1580,7 +1572,7 @@ const letsGo = async () => {
             throw new Error(pushResult.stderr);
           }
 
-          if (!isTerraformed && name !== 'module-boilerplate-x') {
+          if (!isTerraformed) {
             /* Publish NPM. */
             console.log();
             console.log('Running npm publish');
