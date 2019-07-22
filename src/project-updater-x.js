@@ -677,9 +677,19 @@ const projects = [
     dependenciesCount: 8,
   },
   {
+    name: 'string-repeat-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 4,
+  },
+  {
+    name: 'string-ends-with-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 7,
+  },
+  {
     name: 'error-x',
     identifier: SemVerLevel,
-    dependenciesCount: 20,
+    dependenciesCount: 23,
   },
   {
     name: 'assert-x',
