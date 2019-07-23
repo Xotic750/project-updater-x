@@ -5,6 +5,7 @@
   ],
   "module": "dist/{PACKAGE_NAME}.esm.js",
   "main": "dist/{PACKAGE_NAME}.js",
+  "jsdelivr": "dist/{PACKAGE_NAME}.min.js",
   "scripts": {
     "build:esm": "mkdirp dist && babel -s true --env-name esm src/{PACKAGE_NAME}.js -o dist/{PACKAGE_NAME}.esm.js",
     "build:base": "webpack --bail --progress --profile --colors",
