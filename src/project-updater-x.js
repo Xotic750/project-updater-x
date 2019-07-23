@@ -1453,6 +1453,20 @@ const letsGo = async () => {
         }
       }
 
+      if (devDependencies) {
+        /* Run npm install on the repo. */
+        console.log();
+        console.log('Running npm install --save-dev');
+        console.log();
+        devDependencies.forEach((devDependency) => {
+          const npmDevInstallResult = shell.exec(`cd ${repoDir} && npm install --save-dev ${devDependency}`);
+
+          if (npmDevInstallResult.code !== 0) {
+            throw new Error(npmDevInstallResult.stderr);
+          }
+        });
+      }
+
       const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
 
       if (describeResult.code !== 0) {
@@ -1483,20 +1497,6 @@ const letsGo = async () => {
           console.log();
           const repoSemverJSON = `${JSON.stringify(newRepoPackage, null, 2).replace(/{PACKAGE_NAME}/gm, name)}\n`;
           fs.writeFileSync(`${repoDir}/package.json`, repoSemverJSON);
-        }
-
-        if (devDependencies) {
-          /* Run npm install on the repo. */
-          console.log();
-          console.log('Running npm install --save-dev');
-          console.log();
-          devDependencies.forEach((devDependency) => {
-            const npmDevInstallResult = shell.exec(`cd ${repoDir} && npm install --save-dev ${devDependency}`);
-
-            if (npmDevInstallResult.code !== 0) {
-              throw new Error(npmDevInstallResult.stderr);
-            }
-          });
         }
 
         /* Run npm install on the repo. */
