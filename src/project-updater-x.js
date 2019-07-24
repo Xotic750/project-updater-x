@@ -67,6 +67,7 @@ const packageKeyOrder = [
   'files',
   'module',
   'main',
+  'jsdelivr',
   'bin',
   'scripts',
   'license',
