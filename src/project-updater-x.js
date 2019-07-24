@@ -1432,6 +1432,31 @@ const letsGo = async () => {
         });
       }
 
+      if (devDependencies) {
+        /* Run npm install on the repo. */
+        console.log();
+        console.log('Running devDependencies');
+        console.log();
+        devDependencies.forEach((devDependency) => {
+          console.log(devDependency);
+          const npmDevInstallResult = shell.exec(`npm view ${devDependency} version`);
+
+          if (npmDevInstallResult.code !== 0) {
+            throw new Error(npmDevInstallResult.stderr);
+          }
+
+          newRepoPackage.devDependencies[devDependency] = `^${npmDevInstallResult.stdout.trim()}`;
+        });
+
+        newRepoPackage.devDependencies = Object.keys(newRepoPackage.devDependencies)
+          .sort()
+          .reduce((deps, key) => {
+            deps[key] = newRepoPackage.devDependencies[key];
+
+            return deps;
+          }, {});
+      }
+
       /* Write the new repo package.json file. */
       console.log();
       console.log(`Writing ${name} package.json`);
@@ -1451,20 +1476,6 @@ const letsGo = async () => {
           const src = projectSource.replace('safe-to-string-x', 'to-string-symbols-supported-x');
           fs.writeFileSync(path.resolve(srcFile), src);
         }
-      }
-
-      if (devDependencies) {
-        /* Run npm install on the repo. */
-        console.log();
-        console.log('Running npm install --save-dev');
-        console.log();
-        devDependencies.forEach((devDependency) => {
-          const npmDevInstallResult = shell.exec(`cd ${repoDir} && npm install --save-dev ${devDependency}`);
-
-          if (npmDevInstallResult.code !== 0) {
-            throw new Error(npmDevInstallResult.stderr);
-          }
-        });
       }
 
       const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
