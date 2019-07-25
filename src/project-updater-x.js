@@ -1516,14 +1516,14 @@ const letsGo = async () => {
           `<img src="https://data.jsdelivr.com/v1/package/npm/${repoName}/badge?style=rounded"\n` +
           '  alt="jsDelivr hits" height="18">\n' +
           '</a>\n\n';
-      }
 
-      const rxBadges = /<a href="https:\/\/travis[\s\S]+alt="npm version" height="18"\/>\n<\/a>[\n]+/gm;
-      const matchBadges = readme.match(rxBadges);
+        const rxBadges = /<a href="https:\/\/travis[\s\S]+alt="npm version" height="18"\/>\n<\/a>[\n]+/gm;
+        const matchBadges = readme.match(rxBadges);
 
-      if (matchBadges && !matchBadges[0].includes('jsDelivr')) {
-        const newReadme = readme.replace(rxBadges, badges);
-        fs.writeFileSync(path.resolve(readmeFile), newReadme);
+        if (matchBadges && !matchBadges[0].includes('jsDelivr')) {
+          const newReadme = readme.replace(rxBadges, badges);
+          fs.writeFileSync(path.resolve(readmeFile), newReadme);
+        }
       }
 
       const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
