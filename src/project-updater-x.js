@@ -1568,6 +1568,16 @@ const letsGo = async () => {
           throw new Error(npmInstallResult.stderr);
         }
 
+        /* Run npm security-fix  */
+        console.log();
+        console.log('Running npm run security-fix');
+        console.log();
+        const npmSecurityResult = shell.exec(`cd ${repoDir} && npm run security-fix`);
+
+        if (npmSecurityResult.code !== 0) {
+          throw new Error(npmSecurityResult.stderr);
+        }
+
         /* Run the repo lint-fic script. */
         console.log();
         console.log('Running npm run lint-fix');
