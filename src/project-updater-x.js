@@ -1574,7 +1574,7 @@ const letsGo = async () => {
         console.log();
         const npmSecurityResult = shell.exec(`cd ${repoDir} && npm run security-fix`);
 
-        if (npmSecurityResult.code !== 0) {
+        if (npmSecurityResult.code !== 0 && npmSecurityResult.code !== 1) {
           throw new Error(npmSecurityResult.stderr);
         }
 
