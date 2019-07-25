@@ -20,6 +20,7 @@ if (CONTINUE_FROM) {
 
 const TERRAFORM = true;
 const RUN_CJS_TO_ES6 = false;
+const UPDATE_README = false;
 
 const CHECK_PROJECTS_ONLY = false;
 
@@ -1479,41 +1480,43 @@ const letsGo = async () => {
         }
       }
 
-      /* Update README.md */
-      console.log();
-      console.log(`Update README.md: ${name}`);
-      console.log();
-      const readmeFile = `${repoDir}/README.md`;
-      const readme = fs.readFileSync(path.resolve(readmeFile), 'utf8');
-      const escapedRepoName = repoName.replace('@', '%40').replace('/', '%2');
-      const badges =
-        `<a href="https://travis-ci.org/Xotic750/${repoName}"\n` +
-        '  title="Travis status">\n' +
-        '<img\n' +
-        `  src="https://travis-ci.org/Xotic750/${repoName}.svg?branch=master"\n` +
-        '  alt="Travis status" height="18">\n' +
-        '</a>\n' +
-        `<a href="https://david-dm.org/Xotic750/${repoName}"\n` +
-        '  title="Dependency status">\n' +
-        `<img src="https://david-dm.org/Xotic750/${repoName}/status.svg"\n` +
-        '  alt="Dependency status" height="18"/>\n' +
-        '</a>\n' +
-        '<a\n' +
-        `  href="https://david-dm.org/Xotic750/${repoName}?type=dev"\n` +
-        '  title="devDependency status">\n' +
-        `<img src="https://david-dm.org/Xotic750/${repoName}/dev-status.svg"\n` +
-        '  alt="devDependency status" height="18"/>\n' +
-        '</a>\n' +
-        `<a href="https://badge.fury.io/js/${escapedRepoName}"\n` +
-        '  title="npm version">\n' +
-        `<img src="https://badge.fury.io/js/${escapedRepoName}.svg"\n` +
-        '  alt="npm version" height="18">\n' +
-        '</a>\n' +
-        `<a href="https://www.jsdelivr.com/package/npm/${repoName}"\n` +
-        '  title="jsDelivr hits">\n' +
-        `<img src="https://data.jsdelivr.com/v1/package/npm/${repoName}/badge?style=rounded"\n` +
-        '  alt="jsDelivr hits" height="18">\n' +
-        '</a>\n\n';
+      if (UPDATE_README) {
+        /* Update README.md */
+        console.log();
+        console.log(`Update README.md: ${name}`);
+        console.log();
+        const readmeFile = `${repoDir}/README.md`;
+        const readme = fs.readFileSync(path.resolve(readmeFile), 'utf8');
+        const escapedRepoName = repoName.replace('@', '%40').replace('/', '%2');
+        const badges =
+          `<a href="https://travis-ci.org/Xotic750/${repoName}"\n` +
+          '  title="Travis status">\n' +
+          '<img\n' +
+          `  src="https://travis-ci.org/Xotic750/${repoName}.svg?branch=master"\n` +
+          '  alt="Travis status" height="18">\n' +
+          '</a>\n' +
+          `<a href="https://david-dm.org/Xotic750/${repoName}"\n` +
+          '  title="Dependency status">\n' +
+          `<img src="https://david-dm.org/Xotic750/${repoName}/status.svg"\n` +
+          '  alt="Dependency status" height="18"/>\n' +
+          '</a>\n' +
+          '<a\n' +
+          `  href="https://david-dm.org/Xotic750/${repoName}?type=dev"\n` +
+          '  title="devDependency status">\n' +
+          `<img src="https://david-dm.org/Xotic750/${repoName}/dev-status.svg"\n` +
+          '  alt="devDependency status" height="18"/>\n' +
+          '</a>\n' +
+          `<a href="https://badge.fury.io/js/${escapedRepoName}"\n` +
+          '  title="npm version">\n' +
+          `<img src="https://badge.fury.io/js/${escapedRepoName}.svg"\n` +
+          '  alt="npm version" height="18">\n' +
+          '</a>\n' +
+          `<a href="https://www.jsdelivr.com/package/npm/${repoName}"\n` +
+          '  title="jsDelivr hits">\n' +
+          `<img src="https://data.jsdelivr.com/v1/package/npm/${repoName}/badge?style=rounded"\n` +
+          '  alt="jsDelivr hits" height="18">\n' +
+          '</a>\n\n';
+      }
 
       const rxBadges = /<a href="https:\/\/travis[\s\S]+alt="npm version" height="18"\/>\n<\/a>[\n]+/gm;
       const matchBadges = readme.match(rxBadges);
