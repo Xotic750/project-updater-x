@@ -17,7 +17,7 @@
   "scripts": {
     "clean:last": "rimraf last.json",
     "clean": "rimraf tmp",
-    "lint": "eslint -f 'node_modules/eslint-friendly-formatter' --ext .js .",
+    "lint": "eslint -f 'node_modules/eslint-friendly-formatter' --ext .js,.json .",
     "lint-fix": "npm run lint -- --fix",
     "report": "npm run build -- --env.report",
     "report:dev": "npm run build:dev -- --env.report",
