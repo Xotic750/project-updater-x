@@ -20,7 +20,7 @@ if (CONTINUE_FROM) {
 
 const TERRAFORM = true;
 const RUN_CJS_TO_ES6 = false;
-const UPDATE_README = true;
+const UPDATE_README = false;
 
 const CHECK_PROJECTS_ONLY = false;
 
@@ -1491,22 +1491,22 @@ const letsGo = async () => {
         const escapedRepoName = repoName.replace('@', '%40').replace('/', '%2');
         const badges =
           '<a\n' +
-          `  href="https://travis-ci.org/Xotic750/${repoName}"\n` +
+          `  href="https://travis-ci.org/Xotic750/${name}"\n` +
           '  title="Travis status">\n' +
           '<img\n' +
-          `  src="https://travis-ci.org/Xotic750/${repoName}.svg?branch=master"\n` +
+          `  src="https://travis-ci.org/Xotic750/${name}.svg?branch=master"\n` +
           '  alt="Travis status" height="18">\n' +
           '</a>\n' +
           '<a\n' +
-          `  href="https://david-dm.org/Xotic750/${repoName}"\n` +
+          `  href="https://david-dm.org/Xotic750/${name}"\n` +
           '  title="Dependency status">\n' +
-          `<img src="https://david-dm.org/Xotic750/${repoName}/status.svg"\n` +
+          `<img src="https://david-dm.org/Xotic750/${name}/status.svg"\n` +
           '  alt="Dependency status" height="18"/>\n' +
           '</a>\n' +
           '<a\n' +
-          `  href="https://david-dm.org/Xotic750/${repoName}?type=dev"\n` +
+          `  href="https://david-dm.org/Xotic750/${name}?type=dev"\n` +
           '  title="devDependency status">\n' +
-          `<img src="https://david-dm.org/Xotic750/${repoName}/dev-status.svg"\n` +
+          `<img src="https://david-dm.org/Xotic750/${name}/dev-status.svg"\n` +
           '  alt="devDependency status" height="18"/>\n' +
           '</a>\n' +
           '<a\n' +
@@ -1516,15 +1516,15 @@ const letsGo = async () => {
           '  alt="npm version" height="18">\n' +
           '</a>\n' +
           '<a\n' +
-          `  href="https://www.jsdelivr.com/package/npm/${repoName}"\n` +
+          `  href="https://www.jsdelivr.com/package/npm/${name}"\n` +
           '  title="jsDelivr hits">\n' +
-          `<img src="https://data.jsdelivr.com/v1/package/npm/${repoName}/badge?style=rounded"\n` +
+          `<img src="https://data.jsdelivr.com/v1/package/npm/${name}/badge?style=rounded"\n` +
           '  alt="jsDelivr hits" height="18">\n' +
           '</a>\n' +
           '<a\n' +
-          `  href="https://bettercodehub.com/results/Xotic750/${repoName}"\n` +
+          `  href="https://bettercodehub.com/results/Xotic750/${name}"\n` +
           '  title="bettercodehub score">\n' +
-          `<img src="https://bettercodehub.com/edge/badge/Xotic750/${repoName}?branch=master"\n` +
+          `<img src="https://bettercodehub.com/edge/badge/Xotic750/${name}?branch=master"\n` +
           '  alt="bettercodehub score" height="18">\n' +
           '</a>\n\n';
 
