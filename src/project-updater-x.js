@@ -1516,9 +1516,14 @@ const letsGo = async () => {
           '  title="jsDelivr hits">\n' +
           `<img src="https://data.jsdelivr.com/v1/package/npm/${repoName}/badge?style=rounded"\n` +
           '  alt="jsDelivr hits" height="18">\n' +
+          '</a>\n\n' +
+          `<a href="https://bettercodehub.com/results/Xotic750/${repoName}"\n` +
+          '  title="bettercodehub score">\n' +
+          `<img src="https://bettercodehub.com/edge/badge/Xotic750/${repoName}?branch=master"\n` +
+          '  alt="bettercodehub score" height="18">\n' +
           '</a>\n\n';
 
-        const rxBadges = /<a href="https:\/\/travis[\s\S]+alt="npm version" height="18"\/>\n<\/a>[\n]+/gm;
+        const rxBadges = /<a href="https:\/\/travis[\s\S]+alt="jsDelivr hits" height="18"\/>\n<\/a>[\n]+/gm;
         const matchBadges = readme.match(rxBadges);
 
         if (matchBadges && !matchBadges[0].includes('jsDelivr')) {
