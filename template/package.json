@@ -13,7 +13,7 @@
     "build:dev": "npm run build:base --",
     "clean": "rimraf dist && npm run clean:coverage",
     "clean:coverage": "rimraf __tests__/coverage",
-    "lint": "eslint -f 'node_modules/eslint-friendly-formatter' --ext .js .",
+    "lint": "eslint -f 'node_modules/eslint-friendly-formatter' --ext .js,.json .",
     "lint-fix": "npm run lint -- --fix",
     "report": "npm run build -- --env.report",
     "report:dev": "npm run build:dev -- --env.report",
