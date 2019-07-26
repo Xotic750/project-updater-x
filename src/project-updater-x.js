@@ -766,6 +766,7 @@ const projects = [
  */
 const copyFiles = [
   '.babelrc',
+  '.bettercodehub.yml',
   '.editorconfig',
   '.eslintignore',
   '.eslintrc.js',
