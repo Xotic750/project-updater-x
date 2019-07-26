@@ -1539,8 +1539,6 @@ const letsGo = async () => {
           console.log(`Updated README.md: ${name}`);
           console.log();
         }
-
-        throw new Error('STOP');
       }
 
       const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
