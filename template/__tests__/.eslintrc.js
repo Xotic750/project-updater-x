@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    browser: false,
+    browser: true,
     commonjs: true,
     jest: true,
     node: true,
@@ -12,9 +12,9 @@ module.exports = {
     'compat/compat': 'off',
     'prefer-rest-params': 'off',
     'no-prototype-builtins': 'off',
-    'jest/no-standalone-expect': 'warn',
-    complexity: ['warn', 6],
-    'max-lines-per-function': ['warn', {max: 15, skipBlankLines: true, skipComments: true}],
-    'max-params': ['error', 2],
+    'jest/no-standalone-expect': 'off',
+    complexity: 'off',
+    'max-lines-per-function': 'off',
+    'max-params': 'off',
   },
 };

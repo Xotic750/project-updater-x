@@ -33,15 +33,15 @@ module.exports = {
     {
       files: ['webpack.config.js', '.eslintrc.js', 'jest.config.js'],
       env: {
-        browser: false,
+        browser: true,
         commonjs: true,
         jest: false,
         node: true,
       },
       rules: {
-        complexity: ['warn', 6],
-        'max-lines-per-function': ['warn', {max: 15, skipBlankLines: true, skipComments: true}],
-        'max-params': ['error', 2],
+        complexity: 'off',
+        'max-lines-per-function': 'off',
+        'max-params': 'off',
       },
     },
   ],
