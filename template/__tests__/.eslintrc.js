@@ -7,5 +7,8 @@ module.exports = {
     'prefer-rest-params': 'off',
     'no-prototype-builtins': 'off',
     'jest/no-standalone-expect': 'warn',
+    complexity: ['warn', 6],
+    'max-lines-per-function': ['warn', {max: 15, skipBlankLines: true, skipComments: true}],
+    'max-params': ['error', 2],
   },
 };

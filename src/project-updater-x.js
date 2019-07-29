@@ -10,7 +10,6 @@ const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
 const NEW_ORDER = [];
-const SHOW_NEW_ORDER = false;
 const SemVerLevel = 'patch';
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
 
@@ -976,12 +975,6 @@ const letsGo = async () => {
     const toComes = projects.slice(index);
     const dependencyKeys = Object.keys(repoPackage.dependencies);
 
-    if (SHOW_NEW_ORDER) {
-      const newProject = cloneDeep(project);
-      newProject.dependenciesCount = dependencyKeys.length;
-      NEW_ORDER.push(newProject);
-    }
-
     dependencyKeys.forEach((dependencyName) => {
       if (dependencyName.endsWith('-x')) {
         const isInProjects = projects.find((proj) => {
@@ -1452,22 +1445,6 @@ const letsGo = async () => {
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);
     }
-  }
-
-  if (SHOW_NEW_ORDER) {
-    const newProjectsOrder = NEW_ORDER.sort((a, b) => {
-      if (a.dependenciesCount < b.dependenciesCount) {
-        return -1;
-      }
-
-      if (a.dependenciesCount > b.dependenciesCount) {
-        return 1;
-      }
-
-      return 0;
-    });
-
-    console.log(JSON.stringify(newProjectsOrder, null, 2));
   }
 
   /* We finished! */
