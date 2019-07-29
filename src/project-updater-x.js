@@ -745,6 +745,7 @@ const projects = [
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
     dependenciesCount: 5,
+    target: 'node',
   },
 ];
 
@@ -892,7 +893,7 @@ const letsGo = async () => {
   let pleaseContinue = Boolean(CONTINUE_FROM);
   let isContinueFrom = false;
   const projectUpdate = async (project, index) => {
-    const {name: repoName, identifier, regenerator, dependencyClashes, deprecated, devDependencies} = project;
+    const {name: repoName, identifier, regenerator, dependencyClashes, deprecated, devDependencies, target} = project;
     const name = repoName.replace('@xotic750/', '');
     const repoDir = `${TMP}/${name}`;
 
@@ -1001,29 +1002,46 @@ const letsGo = async () => {
       console.log('Copying ...');
       console.log();
       copyFiles.forEach((file) => {
+        let runAdd = false;
+        const destination = `${repoDir}/${file}`;
+
         /* Requires babel regenerator runtime transform. */
         if (regenerator && file === '.babelrc') {
           const regeneratorFile = `${file}.regenerator`;
           console.log(`File: ${regeneratorFile}`);
+
+          if (!fs.existsSync(path.resolve(destination))) {
+            runAdd = true;
+          }
+
           const copyResult = shelljs.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
 
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
           }
-        } else {
-          if (name === 'replace-x') {
-            const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
+        } else if (target === 'node' && file === 'src/.eslintrc.js') {
+          const nodeFile = `${file}.node`;
+          console.log(`File: ${nodeFile}`);
 
-            if (skipThese.includes(file)) {
-              console.log(`Skipping file: ${file}`);
+          if (!fs.existsSync(path.resolve(destination))) {
+            runAdd = true;
+          }
 
-              return;
-            }
+          const copyResult = shelljs.cp(`template/${nodeFile}`, `${repoDir}/${file}`);
+
+          if (copyResult.code !== 0) {
+            throw new Error(copyResult.stderr);
+          }
+        } else if (name === 'replace-x') {
+          const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
+
+          if (skipThese.includes(file)) {
+            console.log(`Skipping file: ${file}`);
+
+            return;
           }
 
           console.log(`File: ${file}`);
-          const destination = `${repoDir}/${file}`;
-          let runAdd = false;
 
           if (!fs.existsSync(path.resolve(destination))) {
             runAdd = true;
@@ -1034,57 +1052,69 @@ const letsGo = async () => {
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
           }
+        } else {
+          console.log(`File: ${file}`);
 
-          if (runAdd) {
-            /* Add the new file to git */
-            console.log();
-            console.log(`Running git add ${file}`);
-            console.log();
-            const addCopyFileResult = shelljs.exec(`cd ${repoDir} && git add ${file}`);
-
-            if (addCopyFileResult.code !== 0) {
-              throw new Error(addCopyFileResult.stderr);
-            }
+          if (!fs.existsSync(path.resolve(destination))) {
+            runAdd = true;
           }
 
-          const srcFile = `${repoDir}/__tests__/${name}.test.js`;
-          const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+          const copyResult = shelljs.cp(`template/${file}`, destination);
 
-          const removeComments = [
-            '/* eslint-disable-next-line compat/compat */',
-            '/* eslint-disable-next-line lodash/prefer-noop */',
-            '/* eslint-disable-next-line compat/compat */',
-            '/* eslint-disable-next-line prefer-rest-params */',
-            '/* eslint-disable-next-line jest/no-hooks */',
-            '/* eslint-disable-next-line no-void */',
-            '/* eslint-disable-next-line compat/compat,no-void */',
-            '/* eslint-disable-next-line no-void,compat/compat */',
-            '/* eslint-disable-next-line no-void,lodash/prefer-noop */',
-            '/* eslint-disable-next-line no-prototype-builtins */',
-            '// eslint-disable-next-line no-new-func',
-            '// eslint-disable-next-line no-prototype-builtins',
-          ];
-
-          let testSrc = projectSource;
-
-          removeComments.forEach((removeComment) => {
-            let hasComment = testSrc.includes(removeComment);
-
-            if (hasComment) {
-              console.log('Removing: ', removeComment);
-            }
-
-            while (hasComment) {
-              testSrc = testSrc.replace(removeComment, '');
-              console.log('Removed');
-              hasComment = testSrc.includes(removeComment);
-            }
-          });
-
-          if (testSrc !== projectSource) {
-            fs.writeFileSync(path.resolve(srcFile), testSrc);
-            console.log('Replaced');
+          if (copyResult.code !== 0) {
+            throw new Error(copyResult.stderr);
           }
+        }
+
+        if (runAdd) {
+          /* Add the new file to git */
+          console.log();
+          console.log(`Running git add ${file}`);
+          console.log();
+          const addCopyFileResult = shelljs.exec(`cd ${repoDir} && git add ${file}`);
+
+          if (addCopyFileResult.code !== 0) {
+            throw new Error(addCopyFileResult.stderr);
+          }
+        }
+
+        const srcFile = `${repoDir}/__tests__/${name}.test.js`;
+        const projectSource = fs.readFileSync(path.resolve(srcFile), 'utf8');
+
+        const removeComments = [
+          '/* eslint-disable-next-line compat/compat */',
+          '/* eslint-disable-next-line lodash/prefer-noop */',
+          '/* eslint-disable-next-line compat/compat */',
+          '/* eslint-disable-next-line prefer-rest-params */',
+          '/* eslint-disable-next-line jest/no-hooks */',
+          '/* eslint-disable-next-line no-void */',
+          '/* eslint-disable-next-line compat/compat,no-void */',
+          '/* eslint-disable-next-line no-void,compat/compat */',
+          '/* eslint-disable-next-line no-void,lodash/prefer-noop */',
+          '/* eslint-disable-next-line no-prototype-builtins */',
+          '// eslint-disable-next-line no-new-func',
+          '// eslint-disable-next-line no-prototype-builtins',
+        ];
+
+        let testSrc = projectSource;
+
+        removeComments.forEach((removeComment) => {
+          let hasComment = testSrc.includes(removeComment);
+
+          if (hasComment) {
+            console.log('Removing: ', removeComment);
+          }
+
+          while (hasComment) {
+            testSrc = testSrc.replace(removeComment, '');
+            console.log('Removed');
+            hasComment = testSrc.includes(removeComment);
+          }
+        });
+
+        if (testSrc !== projectSource) {
+          fs.writeFileSync(path.resolve(srcFile), testSrc);
+          console.log('Replaced');
         }
       });
 
