@@ -7,8 +7,10 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#specifying-environments}
    */
-  env: {},
-
+  env: {
+    jest: false,
+    node: false,
+  },
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#extending-configuration-files}
    */
@@ -30,6 +32,12 @@ module.exports = {
   overrides: [
     {
       files: ['webpack.config.js', '.eslintrc.js', 'jest.config.js'],
+      env: {
+        browser: false,
+        commonjs: true,
+        jest: false,
+        node: true,
+      },
       rules: {
         complexity: ['warn', 6],
         'max-lines-per-function': ['warn', {max: 15, skipBlankLines: true, skipComments: true}],

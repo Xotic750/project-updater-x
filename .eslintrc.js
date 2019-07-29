@@ -7,7 +7,13 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#specifying-environments}
    */
-  env: {},
+  env: {
+    browser: false,
+    commonjs: true,
+    jest: false,
+    node: true,
+    shelljs: true,
+  },
 
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#extending-configuration-files}

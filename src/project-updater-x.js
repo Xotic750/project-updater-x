@@ -1,7 +1,7 @@
 const readlineSync = require('readline-sync');
 const fs = require('fs');
 const path = require('path');
-const shell = require('shelljs');
+const shelljs = require('shelljs');
 const SemVer = require('semver');
 const GitHub = require('github-api');
 const Haikunator = require('haikunator');
@@ -9,7 +9,6 @@ const cloneDeep = require('lodash/cloneDeep');
 const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
-const NEW_ORDER = [];
 const SemVerLevel = 'patch';
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
 
@@ -769,6 +768,7 @@ const copyFiles = [
   'jest.config.js',
   'webpack.config.js',
   '__tests__/.eslintrc.js',
+  'src/.eslintrc.js',
 ];
 
 /**
@@ -929,7 +929,7 @@ const letsGo = async () => {
       console.log();
       console.log(`Cloning: ${repoURL}`);
       console.log();
-      const cloneResult = shell.exec(`git clone ${repoURL} ${repoDir}`);
+      const cloneResult = shelljs.exec(`git clone ${repoURL} ${repoDir}`);
 
       if (cloneResult.code !== 0) {
         throw new Error(cloneResult.stderr);
@@ -939,7 +939,7 @@ const letsGo = async () => {
       console.log();
       console.log(`Pulling: ${repoURL}`);
       console.log();
-      const pullResult = shell.exec(`cd ${repoDir} && git pull`);
+      const pullResult = shelljs.exec(`cd ${repoDir} && git pull`);
 
       if (pullResult.code !== 0) {
         throw new Error(pullResult.stderr);
@@ -1005,7 +1005,7 @@ const letsGo = async () => {
         if (regenerator && file === '.babelrc') {
           const regeneratorFile = `${file}.regenerator`;
           console.log(`File: ${regeneratorFile}`);
-          const copyResult = shell.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
+          const copyResult = shelljs.cp(`template/${regeneratorFile}`, `${repoDir}/${file}`);
 
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
@@ -1029,7 +1029,7 @@ const letsGo = async () => {
             runAdd = true;
           }
 
-          const copyResult = shell.cp(`template/${file}`, destination);
+          const copyResult = shelljs.cp(`template/${file}`, destination);
 
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
@@ -1040,7 +1040,7 @@ const letsGo = async () => {
             console.log();
             console.log(`Running git add ${file}`);
             console.log();
-            const addCopyFileResult = shell.exec(`cd ${repoDir} && git add ${file}`);
+            const addCopyFileResult = shelljs.exec(`cd ${repoDir} && git add ${file}`);
 
             if (addCopyFileResult.code !== 0) {
               throw new Error(addCopyFileResult.stderr);
@@ -1118,7 +1118,7 @@ const letsGo = async () => {
       console.log();
       console.log('Updating dependencies');
       console.log();
-      const salitaResult = shell.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
+      const salitaResult = shelljs.exec(`cd ${repoDir} && salita --ignore-pegged --only-changed --json`);
 
       if (salitaResult.code !== 0) {
         throw new Error(salitaResult.stderr);
@@ -1147,7 +1147,7 @@ const letsGo = async () => {
         console.log();
         devDependencies.forEach((devDependency) => {
           console.log(devDependency);
-          const npmDevInstallResult = shell.exec(`npm view ${devDependency} version`);
+          const npmDevInstallResult = shelljs.exec(`npm view ${devDependency} version`);
 
           if (npmDevInstallResult.code !== 0) {
             throw new Error(npmDevInstallResult.stderr);
@@ -1232,7 +1232,7 @@ const letsGo = async () => {
         }
       }
 
-      const describeResult = shell.exec(`cd ${repoDir} && git describe --dirty --always`);
+      const describeResult = shelljs.exec(`cd ${repoDir} && git describe --dirty --always`);
 
       if (describeResult.code !== 0) {
         throw new Error(describeResult.stderr);
@@ -1266,7 +1266,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running npm install');
         console.log();
-        const npmInstallResult = shell.exec(`cd ${repoDir} && npm install`);
+        const npmInstallResult = shelljs.exec(`cd ${repoDir} && npm install`);
 
         if (npmInstallResult.code !== 0) {
           throw new Error(npmInstallResult.stderr);
@@ -1276,7 +1276,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running npm run security-fix');
         console.log();
-        const npmSecurityResult = shell.exec(`cd ${repoDir} && npm run security-fix`);
+        const npmSecurityResult = shelljs.exec(`cd ${repoDir} && npm run security-fix`);
 
         if (npmSecurityResult.code !== 0 && npmSecurityResult.code !== 1) {
           throw new Error(npmSecurityResult.stderr);
@@ -1286,7 +1286,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running npm run lint-fix');
         console.log();
-        const lintFixResult = shell.exec(`cd ${repoDir} && npm run lint-fix`);
+        const lintFixResult = shelljs.exec(`cd ${repoDir} && npm run lint-fix`);
 
         if (lintFixResult.code !== 0) {
           throw new Error(lintFixResult.stderr);
@@ -1296,7 +1296,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running npm run build');
         console.log();
-        const buildResult = shell.exec(`cd ${repoDir} && npm run build`);
+        const buildResult = shelljs.exec(`cd ${repoDir} && npm run build`);
 
         if (buildResult.code !== 0) {
           throw new Error(buildResult.stderr);
@@ -1306,7 +1306,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running npm run test');
         console.log();
-        const testResult = shell.exec(`cd ${repoDir} && npm run test`);
+        const testResult = shelljs.exec(`cd ${repoDir} && npm run test`);
 
         if (testResult.code !== 0) {
           throw new Error(testResult.stderr);
@@ -1316,7 +1316,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running git add -A');
         console.log();
-        const addResult = shell.exec(`cd ${repoDir} && git add -A`);
+        const addResult = shelljs.exec(`cd ${repoDir} && git add -A`);
 
         if (addResult.code !== 0) {
           throw new Error(addResult.stderr);
@@ -1326,7 +1326,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running git add package-lock.json');
         console.log();
-        const addLockResult = shell.exec(`cd ${repoDir} && git add --force package-lock.json`);
+        const addLockResult = shelljs.exec(`cd ${repoDir} && git add --force package-lock.json`);
 
         if (addLockResult.code !== 0) {
           throw new Error(addLockResult.stderr);
@@ -1339,7 +1339,7 @@ const letsGo = async () => {
         const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
         const commitTitle = TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
         const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
-        const commitResult = shell.exec(`cd ${repoDir} && ${commitCmd}`);
+        const commitResult = shelljs.exec(`cd ${repoDir} && ${commitCmd}`);
 
         if (commitResult.code !== 0 && !commitResult.stdout.includes('nothing to commit')) {
           throw new Error(commitResult.stderr);
@@ -1349,7 +1349,7 @@ const letsGo = async () => {
         console.log();
         console.log('Running git push');
         console.log();
-        const pushResult = shell.exec(`cd ${repoDir} && git push`);
+        const pushResult = shelljs.exec(`cd ${repoDir} && git push`);
 
         if (pushResult.code !== 0) {
           throw new Error(pushResult.stderr);
@@ -1360,7 +1360,7 @@ const letsGo = async () => {
           console.log();
           console.log('Running npm publish');
           console.log();
-          const publishResult = shell.exec(`cd ${repoDir} && npm publish`);
+          const publishResult = shelljs.exec(`cd ${repoDir} && npm publish`);
 
           if (publishResult.code !== 0) {
             throw new Error(publishResult.stderr);
@@ -1405,7 +1405,7 @@ const letsGo = async () => {
       console.log();
       console.log(`Running rm -rf ${repoDir}`);
       console.log();
-      const rmTmpResult = shell.rm('-rf', repoDir);
+      const rmTmpResult = shelljs.rm('-rf', repoDir);
 
       if (rmTmpResult.code !== 0) {
         throw new Error(rmTmpResult.stderr);
@@ -1428,7 +1428,7 @@ const letsGo = async () => {
     console.log();
     console.log(`Running rm -rf ${TMP}`);
     console.log();
-    const rmTmpResult = shell.rm('-rf', TMP);
+    const rmTmpResult = shelljs.rm('-rf', TMP);
 
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);
@@ -1440,7 +1440,7 @@ const letsGo = async () => {
     console.log();
     console.log('Running rm last.json');
     console.log();
-    const rmTmpResult = shell.rm('last.json');
+    const rmTmpResult = shelljs.rm('last.json');
 
     if (rmTmpResult.code !== 0) {
       throw new Error(rmTmpResult.stderr);

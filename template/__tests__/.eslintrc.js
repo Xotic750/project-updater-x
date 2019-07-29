@@ -1,4 +1,10 @@
 module.exports = {
+  env: {
+    browser: false,
+    commonjs: true,
+    jest: true,
+    node: true,
+  },
   rules: {
     'jest/no-hooks': 'off',
     'no-void': 'off',
