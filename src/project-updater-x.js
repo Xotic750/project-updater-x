@@ -126,12 +126,12 @@ const projects = [
     dependenciesCount: 0,
   },
   {
-    name: 'is-node-x',
+    name: 'attempt-x',
     identifier: SemVerLevel,
     dependenciesCount: 0,
   },
   {
-    name: 'attempt-x',
+    name: 'is-node-x',
     identifier: SemVerLevel,
     dependenciesCount: 0,
   },
