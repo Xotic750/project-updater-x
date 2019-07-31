@@ -10,6 +10,7 @@ const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
 const SemVerLevel = 'patch';
+/* eslint-disable-next-line import/no-unresolved */
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
 
 if (CONTINUE_FROM) {
@@ -1414,6 +1415,7 @@ const letsGo = async () => {
           console.log('Creating GitHub release');
           await remoteRepo.createRelease(
             {
+              /* eslint-disable-next-line babel/camelcase */
               tag_name: `v${newRepoPackage.version}`,
               name: releaseName,
               body: BODY_TEXT,

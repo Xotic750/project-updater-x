@@ -7,18 +7,12 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#specifying-environments}
    */
-  env: {
-    browser: false,
-    commonjs: true,
-    jest: false,
-    node: true,
-    shelljs: true,
-  },
+  env: {},
 
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#extending-configuration-files}
    */
-  extends: ['@prorenata/eslint-config-vue'],
+  extends: ['@xotic750/eslint-config-recommended'],
 
   /**
    * You can define global variables here.
@@ -53,7 +47,12 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#configuring-rules}
    */
-  rules: {},
+  rules: {
+    'no-console': 'off',
+    complexity: 'off',
+    'max-lines-per-function': 'off',
+    'max-params': 'off',
+  },
 
   /**
    * Webpack-literate module resolution plugin for eslint-plugin-import.
