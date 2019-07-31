@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.6.8",
-    "@xotic750/eslint-config-recommended": "^1.0.4",
+    "@xotic750/eslint-config-recommended": "^1.0.5",
     "babel-eslint": "^10.0.2",
     "caniuse-lite": "^1.0.30000988",
     "eslint": "=5.16.0",
