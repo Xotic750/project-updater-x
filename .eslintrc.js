@@ -47,12 +47,7 @@ module.exports = {
   /**
    * @see {@link https://eslint.org/docs/user-guide/configuring#configuring-rules}
    */
-  rules: {
-    'no-console': 'off',
-    complexity: 'off',
-    'max-lines-per-function': 'off',
-    'max-params': 'off',
-  },
+  rules: {},
 
   /**
    * Webpack-literate module resolution plugin for eslint-plugin-import.
