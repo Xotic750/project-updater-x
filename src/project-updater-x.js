@@ -802,13 +802,10 @@ const getGithubAPI = async (username, password) => {
 };
 
 const asyncForEach = function asyncForEach(array, callback) {
-  return array.reduce(async function iteratee(promise, item, index) {
-    // This line will wait for the last async function to finish.
-    // The first iteration uses an already resolved Promise
-    // so, it will immediately continue.
+  return array.reduce(async function iteratee(promise, item, index, object) {
     await promise;
 
-    return callback(await item, index, array);
+    return callback(await item, index, object);
   }, Promise.resolve());
 };
 
