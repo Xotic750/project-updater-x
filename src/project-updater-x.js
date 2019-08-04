@@ -579,7 +579,7 @@ const projects = [
   {
     name: '@xotic750/promise-x',
     identifier: SemVerLevel,
-    devDependencies: ['bluebird'],
+    devDependencies: ['bluebird', 'promises-aplus-tests', 'promises-es6-tests'],
     dependenciesCount: 17,
   },
   {
