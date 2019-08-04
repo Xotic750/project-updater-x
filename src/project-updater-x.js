@@ -222,6 +222,11 @@ const projects = [
     dependenciesCount: 2,
   },
   {
+    name: 'symbol-iterator-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
     name: 'has-to-string-tag-x',
     identifier: SemVerLevel,
     dependenciesCount: 2,
