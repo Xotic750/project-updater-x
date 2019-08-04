@@ -577,7 +577,7 @@ const projects = [
     dependenciesCount: 26,
   },
   {
-    name: 'promise-x',
+    name: '@xotic750/promise-x',
     identifier: SemVerLevel,
     devDependencies: ['bluebird'],
     dependenciesCount: 17,
