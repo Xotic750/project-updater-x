@@ -227,6 +227,11 @@ const projects = [
     dependenciesCount: 1,
   },
   {
+    name: 'symbol-species-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
+  },
+  {
     name: 'has-to-string-tag-x',
     identifier: SemVerLevel,
     dependenciesCount: 2,
