@@ -447,6 +447,11 @@ const projects = [
     dependenciesCount: 10,
   },
   {
+    name: 'rename-function-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 0,
+  },
+  {
     name: 'is-regexp-x',
     identifier: SemVerLevel,
     dependenciesCount: 6,
