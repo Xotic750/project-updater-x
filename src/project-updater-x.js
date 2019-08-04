@@ -292,13 +292,6 @@ const projects = [
     dependenciesCount: 2,
   },
   {
-    name: 'delay-promise-x',
-    identifier: SemVerLevel,
-    regenerator: true,
-    dependencyClashes: ['lodash'],
-    dependenciesCount: 1,
-  },
-  {
     name: 'is-object-like-x',
     identifier: SemVerLevel,
     dependenciesCount: 2,
@@ -581,7 +574,18 @@ const projects = [
   {
     name: 'collections-x',
     identifier: SemVerLevel,
-    dependenciesCount: 22,
+    dependenciesCount: 26,
+  },
+  {
+    name: 'promise-x',
+    identifier: SemVerLevel,
+    devDependencies: ['bluebird'],
+    dependenciesCount: 17,
+  },
+  {
+    name: 'delay-promise-x',
+    identifier: SemVerLevel,
+    dependenciesCount: 1,
   },
   {
     name: 'is-async-function-x',
