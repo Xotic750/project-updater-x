@@ -6,6 +6,7 @@ const SemVer = require('semver');
 const GitHub = require('github-api');
 const Haikunator = require('haikunator');
 const cloneDeep = require('lodash/cloneDeep');
+const isEqual = require('lodash/isEqual');
 const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
@@ -916,6 +917,7 @@ const letsGo = async () => {
     const {name: repoName, identifier, regenerator, dependencyClashes, deprecated, devDependencies, target} = project;
     const name = repoName.replace('@xotic750/', '');
     const repoDir = `${TMP}/${name}`;
+    let isSkipping = false;
 
     if (pleaseContinue && !isContinueFrom) {
       if (CONTINUE_FROM === name) {
@@ -1290,35 +1292,39 @@ const letsGo = async () => {
         throw new Error(diffSrcResult.stderr);
       }
 
-      const srcChanged = Boolean(diffSrcResult.stdout.trim());
+      const publishedPackageResult = shelljs.exec(
+        `cd ${repoDir} && git --no-pager show $(git tag --sort version:refname | tail -n 1):package.json`,
+      );
 
-      // const diffEsmResult = shelljs.exec(
-      //   `cd ${repoDir}&& git --no-pager diff  $(git tag --sort version:refname | tail -n 1) HEAD -- dist/${name}.esm.js`,
-      // );
-      //
-      // if (diffEsmResult.code !== 0) {
-      //   throw new Error(diffEsmResult.stderr);
-      // }
-      //
-      // const esmChanged = Boolean(diffEsmResult.stdout.trim());
+      if (publishedPackageResult.code !== 0) {
+        throw new Error(publishedPackageResult.stderr);
+      }
 
+      const publishedPackage = JSON.parse(publishedPackageResult.stdout);
       const describeResult = shelljs.exec(`cd ${repoDir} && git describe --dirty --always`);
 
       if (describeResult.code !== 0) {
         throw new Error(describeResult.stderr);
       }
 
+      const dependenciesChanged = !isEqual(newRepoPackage.dependencies, publishedPackage.dependencies);
+      console.log('Dependencies changed: ', dependenciesChanged);
+      const srcChanged = Boolean(diffSrcResult.stdout.trim());
+      console.log('Source changed: ', srcChanged);
       const isDirty = describeResult.stdout.includes('-dirty');
+      console.log('Is dirty: ', isDirty);
+      const isPublishing = PUBLISH && (srcChanged || dependenciesChanged);
+      console.log(`Publishing: ${isPublishing}`);
 
-      if (!isDirty && !srcChanged) {
+      isSkipping = !isDirty && !srcChanged && !dependenciesChanged;
+
+      if (isSkipping && !isPublishing) {
         console.log();
         console.log(`No change, skipping: ${name}`);
         console.log();
-
-        return;
       }
 
-      if (PUBLISH && srcChanged) {
+      if (isPublishing) {
         const semver = new SemVer(newRepoPackage.version).inc(identifier);
         newRepoPackage.version = semver.toString();
         console.log();
@@ -1326,7 +1332,7 @@ const letsGo = async () => {
         console.log();
       }
 
-      if (isDirty || PUBLISH) {
+      if (!isSkipping || isPublishing) {
         /* Write the new repo package.json file. */
         console.log();
         console.log(`Writing ${name} package.json`);
@@ -1426,48 +1432,48 @@ const letsGo = async () => {
         if (pushResult.code !== 0) {
           throw new Error(pushResult.stderr);
         }
-      }
 
-      if (PUBLISH && srcChanged) {
-        /* Publish NPM. */
-        console.log();
-        console.log('Running npm publish');
-        console.log();
-        const publishResult = shelljs.exec(`cd ${repoDir} && npm publish`);
+        if (isPublishing) {
+          /* Publish NPM. */
+          console.log();
+          console.log('Running npm publish');
+          console.log();
+          const publishResult = shelljs.exec(`cd ${repoDir} && npm publish`);
 
-        if (publishResult.code !== 0) {
-          throw new Error(publishResult.stderr);
+          if (publishResult.code !== 0) {
+            throw new Error(publishResult.stderr);
+          }
+
+          /* Publish GitHub release. */
+          console.log();
+          console.log('GitHub release');
+          console.log();
+          const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
+          console.log(remoteRepo);
+
+          console.log();
+          console.log('Generating release name');
+          console.log();
+          const releaseName = new Haikunator().haikunate();
+          console.log(releaseName);
+
+          console.log('Creating GitHub release');
+          await remoteRepo.createRelease(
+            {
+              /* eslint-disable-next-line babel/camelcase */
+              tag_name: `v${newRepoPackage.version}`,
+              name: releaseName,
+              body: BODY_TEXT,
+            },
+            (error /* , result, request */) => {
+              if (error) {
+                throw new Error(error);
+              }
+
+              console.log('GitHub release created');
+            },
+          );
         }
-
-        /* Publish GitHub release. */
-        console.log();
-        console.log('GitHub release');
-        console.log();
-        const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
-        console.log(remoteRepo);
-
-        console.log();
-        console.log('Generating release name');
-        console.log();
-        const releaseName = new Haikunator().haikunate();
-        console.log(releaseName);
-
-        console.log('Creating GitHub release');
-        await remoteRepo.createRelease(
-          {
-            /* eslint-disable-next-line babel/camelcase */
-            tag_name: `v${newRepoPackage.version}`,
-            name: releaseName,
-            body: BODY_TEXT,
-          },
-          (error /* , result, request */) => {
-            if (error) {
-              throw new Error(error);
-            }
-
-            console.log('GitHub release created');
-          },
-        );
       }
     }
 
@@ -1485,11 +1491,13 @@ const letsGo = async () => {
 
     fs.writeFileSync('last.json', `${JSON.stringify({name}, null, 2)}\n`);
 
-    console.log();
-    console.log('Waiting 5 seconds before continuing');
-    console.log();
-    /* eslint-disable-next-line no-use-extend-native/no-use-extend-native */
-    await Promise.delay(5000);
+    if (!isSkipping) {
+      console.log();
+      console.log('Waiting 5 seconds before continuing');
+      console.log();
+      /* eslint-disable-next-line no-use-extend-native/no-use-extend-native */
+      await Promise.delay(5000);
+    }
   };
 
   await asyncForEach(projects, projectUpdate);
