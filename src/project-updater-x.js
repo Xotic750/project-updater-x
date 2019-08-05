@@ -80,692 +80,565 @@ const projects = [
   {
     name: 'module-boilerplate-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'nan-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'infinity-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'has-boxed-string-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'has-reflect-support-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'is-nan-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'modulo-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'is-nil-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'to-boolean-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'attempt-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'is-node-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'to-string-tag-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'white-space-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'same-value-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'same-value-zero-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'to-string-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'require-object-coercible-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'require-coercible-to-string-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'regexp-escape-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'is-falsey-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'is-truthy-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'is-surrogate-pair-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'is-finite-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'trim-left-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'trim-right-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'trim-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'parse-int-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'has-symbol-support-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'symbol-iterator-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'symbol-species-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'has-to-string-tag-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'normalize-space-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'replace-comments-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'is-function-x',
     identifier: SemVerLevel,
-    dependenciesCount: 8,
   },
   {
     name: 'to-primitive-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'to-number-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'math-sign-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'to-integer-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'is-integer-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'is-safe-integer-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'is-length-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'math-clamp-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'math-trunc-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'to-safe-integer-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'is-object-like-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'to-string-symbols-supported-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'split-if-boxed-bug-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'to-length-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'to-object-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'array-like-slice-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'is-array-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'array-slice-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'shuffle-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'number-to-decimal-form-string-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'string-quote-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'assert-is-object-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'to-property-key-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'property-is-enumerable-x',
     identifier: SemVerLevel,
-    dependenciesCount: 2,
   },
   {
     name: 'assert-is-function-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
+  },
+  {
+    name: 'array-any-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'array-all-x',
+    identifier: SemVerLevel,
   },
   {
     name: 'array-map-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'array-every-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'array-filter-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'array-for-each-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'is-array-like-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'power-set-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'get-prototype-of-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'is-error-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'has-own-property-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'get-own-property-symbols-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'get-own-enumerable-property-symbols-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'object-define-property-x',
     identifier: SemVerLevel,
-    dependenciesCount: 9,
   },
   {
     name: 'is-index-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'object-get-own-property-descriptor-x',
     identifier: SemVerLevel,
-    dependenciesCount: 10,
   },
   {
     name: 'rename-function-x',
     identifier: SemVerLevel,
-    dependenciesCount: 0,
   },
   {
     name: 'is-regexp-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'object-keys-x',
     identifier: SemVerLevel,
-    dependenciesCount: 10,
   },
   {
     name: 'get-own-enumerable-keys-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'string-pad-start-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'to-uint-24-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'int-to-rgb-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'calculate-from-index-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'find-index-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'index-of-x',
     identifier: SemVerLevel,
-    dependenciesCount: 10,
   },
   {
     name: 'array-includes-x',
     identifier: SemVerLevel,
-    dependenciesCount: 9,
   },
   {
     name: 'array-reduce-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'array-union-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'is-prototype-of-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'assert-is-callable-x',
     identifier: SemVerLevel,
-    dependenciesCount: 3,
   },
   {
     name: 'array-reduce-right-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'object-define-properties-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'big-counter-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'bind-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'get-function-name-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'get-own-non-enumerable-property-symbols-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'array-some-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'array-difference-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'array-intersection-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'is-set-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'is-map-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'is-array-buffer-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'object-create-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'collections-x',
     identifier: SemVerLevel,
-    dependenciesCount: 26,
   },
   {
     name: '@xotic750/promise-x',
     identifier: SemVerLevel,
     devDependencies: ['bluebird', 'promises-aplus-tests', 'promises-es6-tests'],
-    dependenciesCount: 17,
   },
   {
     name: 'delay-promise-x',
     identifier: SemVerLevel,
-    dependenciesCount: 1,
   },
   {
     name: 'is-async-function-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'is-data-view-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'get-own-property-names-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'object-assign-x',
     identifier: SemVerLevel,
-    dependenciesCount: 11,
   },
   {
     name: 'reflect-own-keys-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'string-includes-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'string-starts-with-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'to-iso-string-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'inspect-x',
     identifier: SemVerLevel,
-    dependenciesCount: 56,
   },
   {
     name: 'util-format-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'calculate-from-index-right-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'find-last-index-x',
     identifier: SemVerLevel,
-    dependenciesCount: 5,
   },
   {
     name: 'get-own-non-enumerable-keys-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'get-function-args-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'define-properties-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: 'object-walk-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'deep-equal-x',
     identifier: SemVerLevel,
-    dependenciesCount: 19,
   },
   {
     name: 'is-deep-strict-equal-x',
     identifier: SemVerLevel,
-    dependenciesCount: 30,
   },
   {
     name: 'truncate-x',
     identifier: SemVerLevel,
-    dependenciesCount: 8,
   },
   {
     name: 'string-repeat-x',
     identifier: SemVerLevel,
-    dependenciesCount: 4,
   },
   {
     name: 'string-ends-with-x',
     identifier: SemVerLevel,
-    dependenciesCount: 7,
   },
   {
     name: 'error-x',
     identifier: SemVerLevel,
-    dependenciesCount: 23,
   },
   {
     name: 'assert-x',
     identifier: SemVerLevel,
-    dependenciesCount: 8,
   },
   {
     name: 'number-format-x',
     identifier: SemVerLevel,
-    dependenciesCount: 8,
   },
   {
     name: 'reflect-define-property-x',
     identifier: SemVerLevel,
-    dependenciesCount: 9,
   },
   {
     name: 'is-plain-object-x',
     identifier: SemVerLevel,
-    dependenciesCount: 9,
   },
   {
     name: 'last-index-of-x',
     identifier: SemVerLevel,
-    dependenciesCount: 9,
   },
   {
     name: 'cross-console-x',
     identifier: SemVerLevel,
-    dependenciesCount: 19,
   },
   {
     name: 'enumify-x',
     identifier: SemVerLevel,
-    dependenciesCount: 6,
   },
   {
     name: '@xotic750/color',
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
-    dependenciesCount: 3,
   },
   {
     name: '@xotic750/colorable',
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
-    dependenciesCount: 2,
+
     devDependencies: ['colors.css'],
   },
   {
     name: 'replace-x',
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
-    dependenciesCount: 5,
+
     target: 'node',
   },
 ];
