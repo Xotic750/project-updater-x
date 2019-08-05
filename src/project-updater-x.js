@@ -1282,6 +1282,26 @@ const letsGo = async () => {
         }
       }
 
+      const diffSrcResult = shelljs.exec(
+        `cd ${repoDir}&& git --no-pager diff  $(git tag --sort version:refname | tail -n 1) HEAD -- src/${name}.js`,
+      );
+
+      if (diffSrcResult.code !== 0) {
+        throw new Error(diffSrcResult.stderr);
+      }
+
+      const srcChanged = Boolean(diffSrcResult.stdout.trim());
+
+      // const diffEsmResult = shelljs.exec(
+      //   `cd ${repoDir}&& git --no-pager diff  $(git tag --sort version:refname | tail -n 1) HEAD -- dist/${name}.esm.js`,
+      // );
+      //
+      // if (diffEsmResult.code !== 0) {
+      //   throw new Error(diffEsmResult.stderr);
+      // }
+      //
+      // const esmChanged = Boolean(diffEsmResult.stdout.trim());
+
       const describeResult = shelljs.exec(`cd ${repoDir} && git describe --dirty --always`);
 
       if (describeResult.code !== 0) {
@@ -1290,21 +1310,23 @@ const letsGo = async () => {
 
       const isDirty = describeResult.stdout.includes('-dirty');
 
-      if (!isDirty) {
+      if (!isDirty && !srcChanged) {
         console.log();
         console.log(`No change, skipping: ${name}`);
         console.log();
+
+        return;
       }
 
-      if (isDirty) {
-        if (PUBLISH) {
-          const semver = new SemVer(newRepoPackage.version).inc(identifier);
-          newRepoPackage.version = semver.toString();
-          console.log();
-          console.log(`Update ${name} version using ${identifier} from ${repoPackage.version} to ${newRepoPackage.version}`);
-          console.log();
-        }
+      if (PUBLISH && srcChanged) {
+        const semver = new SemVer(newRepoPackage.version).inc(identifier);
+        newRepoPackage.version = semver.toString();
+        console.log();
+        console.log(`Update ${name} version using ${identifier} from ${repoPackage.version} to ${newRepoPackage.version}`);
+        console.log();
+      }
 
+      if (isDirty || PUBLISH) {
         /* Write the new repo package.json file. */
         console.log();
         console.log(`Writing ${name} package.json`);
@@ -1404,50 +1426,48 @@ const letsGo = async () => {
         if (pushResult.code !== 0) {
           throw new Error(pushResult.stderr);
         }
+      }
 
-        if (PUBLISH) {
-          /* Publish NPM. */
-          console.log();
-          console.log('Running npm publish');
-          console.log();
-          const publishResult = shelljs.exec(`cd ${repoDir} && npm publish`);
+      if (PUBLISH && srcChanged) {
+        /* Publish NPM. */
+        console.log();
+        console.log('Running npm publish');
+        console.log();
+        const publishResult = shelljs.exec(`cd ${repoDir} && npm publish`);
 
-          if (publishResult.code !== 0) {
-            throw new Error(publishResult.stderr);
-          }
+        if (publishResult.code !== 0) {
+          throw new Error(publishResult.stderr);
         }
 
-        if (PUBLISH) {
-          /* Publish GitHub release. */
-          console.log();
-          console.log('GitHub release');
-          console.log();
-          const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
-          console.log(remoteRepo);
+        /* Publish GitHub release. */
+        console.log();
+        console.log('GitHub release');
+        console.log();
+        const remoteRepo = await GITHUB_API.getRepo(GITHUB_REPO_PREFIX, name);
+        console.log(remoteRepo);
 
-          console.log();
-          console.log('Generating release name');
-          console.log();
-          const releaseName = new Haikunator().haikunate();
-          console.log(releaseName);
+        console.log();
+        console.log('Generating release name');
+        console.log();
+        const releaseName = new Haikunator().haikunate();
+        console.log(releaseName);
 
-          console.log('Creating GitHub release');
-          await remoteRepo.createRelease(
-            {
-              /* eslint-disable-next-line babel/camelcase */
-              tag_name: `v${newRepoPackage.version}`,
-              name: releaseName,
-              body: BODY_TEXT,
-            },
-            (error /* , result, request */) => {
-              if (error) {
-                throw new Error(error);
-              }
+        console.log('Creating GitHub release');
+        await remoteRepo.createRelease(
+          {
+            /* eslint-disable-next-line babel/camelcase */
+            tag_name: `v${newRepoPackage.version}`,
+            name: releaseName,
+            body: BODY_TEXT,
+          },
+          (error /* , result, request */) => {
+            if (error) {
+              throw new Error(error);
+            }
 
-              console.log('GitHub release created');
-            },
-          );
-        }
+            console.log('GitHub release created');
+          },
+        );
       }
     }
 

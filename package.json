@@ -16,7 +16,7 @@
   "main": "src/project-updater-x.js",
   "scripts": {
     "clean:last": "rimraf last.json",
-    "clean": "rimraf tmp",
+    "clean": "#rimraf tmp",
     "lint": "eslint -f 'node_modules/eslint-friendly-formatter' --ext .js,.json .",
     "lint-fix": "npm run lint -- --fix",
     "report": "npm run build -- --env.report",
