@@ -1142,12 +1142,18 @@ const letsGo = async () => {
           '  title="bettercodehub score">\n' +
           `<img src="https://bettercodehub.com/edge/badge/Xotic750/${name}?branch=master"\n` +
           '  alt="bettercodehub score" height="18">\n' +
+          '</a>\n' +
+          '<a\n' +
+          `  href="https://coveralls.io/github/Xotic750/${name}?branch=master"\n` +
+          '  title="Coverage Status">\n' +
+          `<img src="https://coveralls.io/repos/github/Xotic750/${name}/badge.svg?branch=master"\n` +
+          '  alt="Coverage Status" height="18">\n' +
           '</a>\n\n';
 
-        const rxBadges = /<a[\s\S]+href="https:\/\/travis[\s\S]+alt="jsDelivr hits" height="18">\n<\/a>[\n]+/gm;
+        const rxBadges = /<a[\s\S]+href="https:\/\/travis[\s\S]+alt="bettercodehub score" height="18">\n<\/a>[\n]+/gm;
         const matchBadges = readme.match(rxBadges);
 
-        if (matchBadges && !matchBadges[0].includes('bettercodehub')) {
+        if (matchBadges && !matchBadges[0].includes('coveralls')) {
           const newReadme = readme.replace(rxBadges, badges);
           fs.writeFileSync(path.resolve(readmeFile), newReadme);
 
