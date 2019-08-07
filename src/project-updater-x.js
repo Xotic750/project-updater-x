@@ -1104,7 +1104,7 @@ const letsGo = async () => {
         console.log();
         const readmeFile = `${repoDir}/README.md`;
         const readme = fs.readFileSync(path.resolve(readmeFile), 'utf8');
-        const escapedRepoName = repoName.replace('@', '%40').replace('/', '%2');
+        const escapedRepoName = repoName.replace('@', '%40').replace('/', '%2F');
         const badges =
           '<a\n' +
           `  href="https://travis-ci.org/Xotic750/${name}"\n` +
