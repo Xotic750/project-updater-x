@@ -122,6 +122,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'global-this-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'is-node-x',
     identifier: SemVerLevel,
   },
