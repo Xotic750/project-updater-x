@@ -90,6 +90,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'noop-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
   },
