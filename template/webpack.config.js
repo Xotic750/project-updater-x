@@ -17,19 +17,32 @@ const PACKAGE = require('./package.json');
 const getGlobal = function() {
   'use strict';
 
-  if (typeof self !== 'undefined') {
-    return self;
-  }
+  /* eslint-disable-next-line no-var */
+  var objectPrototype = {}.constructor.prototype;
+  /* eslint-disable-next-line no-var,prefer-destructuring */
+  var defineProperty = objectPrototype.defineProperty;
+  /* eslint-disable-next-line no-var */
+  var $globalThis;
 
-  if (typeof window !== 'undefined') {
-    return window;
-  }
+  try {
+    defineProperty(objectPrototype, '$$globalThis$$', {
+      /* eslint-disable-next-line object-shorthand */
+      get: function() {
+        return this;
+      },
+      /* eslint-disable-next-line prettier/prettier */
+      configurable: true
+    });
 
-  if (typeof global !== 'undefined') {
-    return global;
-  }
+    /* eslint-disable-next-line no-undef */
+    $globalThis = typeof $$globalThis$$ === 'undefined' ? self || window : $$globalThis$$;
 
-  return Function('return this')();
+    delete objectPrototype.$$globalThis$$;
+
+    return $globalThis;
+  } catch (error) {
+    return self || window;
+  }
 };
 
 const filename = PACKAGE.name.replace('@xotic750/', '');
