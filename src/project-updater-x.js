@@ -91,6 +91,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'is-primitive-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'noop-x',
     identifier: SemVerLevel,
   },
@@ -299,6 +303,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'cast-array-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'array-slice-x',
     identifier: SemVerLevel,
   },
@@ -435,15 +443,15 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
-    name: 'array-uniq-x',
-    identifier: SemVerLevel,
-  },
-  {
     name: 'array-includes-x',
     identifier: SemVerLevel,
   },
   {
     name: 'array-reduce-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'array-uniq-x',
     identifier: SemVerLevel,
   },
   {
