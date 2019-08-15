@@ -10,6 +10,7 @@ const isEqual = require('lodash/isEqual');
 const Promise = require('bluebird');
 const templatePackage = require('../template/package.json');
 
+const FORCE_PUBLISH = false;
 const SemVerLevel = 'patch';
 /* eslint-disable-next-line import/no-unresolved */
 const CONTINUE_FROM = fs.existsSync(path.resolve('last.json')) ? require('../last.json').name : '';
@@ -430,6 +431,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'array-uniq-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'array-includes-x',
     identifier: SemVerLevel,
   },
@@ -633,13 +638,10 @@ const projects = [
   {
     name: '@xotic750/color',
     identifier: SemVerLevel,
-    dependencyClashes: ['lodash'],
   },
   {
     name: '@xotic750/colorable',
     identifier: SemVerLevel,
-    dependencyClashes: ['lodash'],
-
     devDependencies: ['colors.css'],
   },
   {
@@ -1200,7 +1202,7 @@ const letsGo = async () => {
       console.log('Source changed: ', srcChanged);
       const isDirty = describeResult.stdout.includes('-dirty');
       console.log('Is dirty: ', isDirty);
-      const isPublishing = PUBLISH && (srcChanged || dependenciesChanged);
+      const isPublishing = PUBLISH && (srcChanged || dependenciesChanged || FORCE_PUBLISH);
       console.log(`Publishing: ${isPublishing}`);
 
       isSkipping = !isDirty && !srcChanged && !dependenciesChanged;
@@ -1302,7 +1304,7 @@ const letsGo = async () => {
         console.log('Running git commit');
         console.log();
         const commitBody = BODY_TEXT ? ` -m "${BODY_TEXT}"` : '';
-        const commitTitle = TITLE_TEXT || `:bookmark: v${newRepoPackage.version}`;
+        const commitTitle = TITLE_TEXT || isPublishing ? `:bookmark: v${newRepoPackage.version}` : 'Maintenance';
         const commitCmd = `git commit -m "${commitTitle}"${commitBody}`;
         const commitResult = shelljs.exec(`cd ${repoDir} && ${commitCmd}`);
 
