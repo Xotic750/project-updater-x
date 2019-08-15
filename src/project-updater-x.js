@@ -95,6 +95,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'object-freeze-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
   },
