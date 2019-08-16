@@ -91,6 +91,14 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'simple-bind-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'simple-methodize-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'is-primitive-x',
     identifier: SemVerLevel,
   },
