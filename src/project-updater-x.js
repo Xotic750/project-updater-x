@@ -83,6 +83,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'cached-constructors-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'nan-x',
     identifier: SemVerLevel,
   },
@@ -103,19 +107,23 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'has-boxed-string-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'split-if-boxed-bug-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'simple-call-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'noop-x',
     identifier: SemVerLevel,
   },
   {
     name: 'object-freeze-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'cached-constructors-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'has-boxed-string-x',
     identifier: SemVerLevel,
   },
   {
@@ -288,10 +296,6 @@ const projects = [
   },
   {
     name: 'to-string-symbols-supported-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'split-if-boxed-bug-x',
     identifier: SemVerLevel,
   },
   {
