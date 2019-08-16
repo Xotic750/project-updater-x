@@ -83,6 +83,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'noop-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
   },
@@ -95,11 +99,7 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
-    name: 'simple-bind-x',
-    identifier: SemVerLevel,
-  },
-  {
-    name: 'simple-methodize-x',
+    name: 'has-boxed-string-x',
     identifier: SemVerLevel,
   },
   {
@@ -107,11 +107,11 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
-    name: 'has-boxed-string-x',
+    name: 'util-pusher-x',
     identifier: SemVerLevel,
   },
   {
-    name: 'split-if-boxed-bug-x',
+    name: 'simple-bind-x',
     identifier: SemVerLevel,
   },
   {
@@ -119,7 +119,11 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
-    name: 'noop-x',
+    name: 'simple-methodize-x',
+    identifier: SemVerLevel,
+  },
+  {
+    name: 'split-if-boxed-bug-x',
     identifier: SemVerLevel,
   },
   {
