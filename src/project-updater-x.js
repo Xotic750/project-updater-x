@@ -87,6 +87,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'has-working-bind-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'cached-constructors-x',
     identifier: SemVerLevel,
   },
