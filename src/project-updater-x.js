@@ -423,6 +423,10 @@ const projects = [
     identifier: SemVerLevel,
   },
   {
+    name: 'util-get-getter-x',
+    identifier: SemVerLevel,
+  },
+  {
     name: 'rename-function-x',
     identifier: SemVerLevel,
   },
