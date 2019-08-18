@@ -1209,12 +1209,24 @@ const letsGo = async () => {
         }
       }
 
-      const diffSrcResult = shelljs.exec(
-        `cd ${repoDir}&& git --no-pager diff  $(git tag --sort version:refname | tail -n 1) HEAD -- src/${name}.js`,
+      const lastDiffSrcResult = shelljs.exec(`cd ${repoDir} && git --no-pager diff HEAD^ -- src/${name}.js`);
+
+      if (lastDiffSrcResult.code !== 0) {
+        throw new Error(lastDiffSrcResult.stderr);
+      }
+
+      const lastPackageResult = shelljs.exec(`cd ${repoDir} && git --no-pager show HEAD^:package.json`);
+
+      if (lastPackageResult.code !== 0) {
+        throw new Error(lastPackageResult.stderr);
+      }
+
+      const publishedDiffSrcResult = shelljs.exec(
+        `cd ${repoDir} && git --no-pager diff $(git tag --sort version:refname | tail -n 1) HEAD -- src/${name}.js`,
       );
 
-      if (diffSrcResult.code !== 0) {
-        throw new Error(diffSrcResult.stderr);
+      if (publishedDiffSrcResult.code !== 0) {
+        throw new Error(publishedDiffSrcResult.stderr);
       }
 
       const publishedPackageResult = shelljs.exec(
@@ -1232,16 +1244,24 @@ const letsGo = async () => {
         throw new Error(describeResult.stderr);
       }
 
-      const dependenciesChanged = !isEqual(newRepoPackage.dependencies, publishedPackage.dependencies);
-      console.log('Dependencies changed: ', dependenciesChanged);
-      const srcChanged = Boolean(diffSrcResult.stdout.trim());
-      console.log('Source changed: ', srcChanged);
+      const lastPackage = JSON.parse(lastPackageResult.stdout);
+      const lastDependenciesChanged = !isEqual(newRepoPackage.dependencies, lastPackage.dependencies);
+      console.log('Last dependencies changed: ', lastDependenciesChanged);
+      const lastSrcChanged = Boolean(lastDiffSrcResult.stdout.trim());
+      console.log('Last source changed: ', lastSrcChanged);
+      const publishedDependenciesChanged = !isEqual(newRepoPackage.dependencies, publishedPackage.dependencies);
+      console.log('Published dependencies changed: ', publishedDependenciesChanged);
+      const publishedSrcChanged = Boolean(publishedDiffSrcResult.stdout.trim());
+      console.log('Published source changed: ', publishedSrcChanged);
       const isDirty = describeResult.stdout.includes('-dirty');
       console.log('Is dirty: ', isDirty);
-      const isPublishing = PUBLISH && (srcChanged || dependenciesChanged || FORCE_PUBLISH);
+      const isPublishing = PUBLISH && (publishedSrcChanged || publishedDependenciesChanged || FORCE_PUBLISH);
       console.log(`Publishing: ${isPublishing}`);
 
-      isSkipping = !isDirty && !srcChanged && !dependenciesChanged;
+      isSkipping =
+        !isDirty &&
+        ((isPublishing && !publishedSrcChanged && !publishedDependenciesChanged) ||
+          (!isPublishing && !lastSrcChanged && !lastDependenciesChanged));
 
       if (isSkipping && !isPublishing) {
         console.log();
