@@ -684,7 +684,6 @@ const projects = [
     name: 'replace-x',
     identifier: SemVerLevel,
     dependencyClashes: ['lodash'],
-
     target: 'node',
   },
 ];
