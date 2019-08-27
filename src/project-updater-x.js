@@ -60,6 +60,7 @@ const packageKeyOrder = [
   'files',
   'module',
   'main',
+  'typings',
   'jsdelivr',
   'bin',
   'scripts',
@@ -692,6 +693,11 @@ const projects = [
     dependencyClashes: ['prettier'],
     target: 'node',
   },
+  {
+    name: 'v-click-outside-x',
+    identifier: SemVerLevel,
+    devDependencies: ['@typescript-eslint/eslint-plugin', '@typescript-eslint/parser'],
+  },
 ];
 
 /**
@@ -978,7 +984,7 @@ const letsGo = async () => {
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
           }
-        } else if (name === 'replace-x') {
+        } else if (name === 'replace-x' || name === 'less-to-css-x') {
           const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
 
           if (skipThese.includes(file)) {
@@ -1069,7 +1075,7 @@ const letsGo = async () => {
       console.log('Updating package.json');
       console.log();
       const modifiedRepoPackage = packageKeyOrder.reduce((obj, key) => {
-        if (name === 'replace-x') {
+        if (name === 'replace-x' || name === 'less-to-css-x') {
           if (key === 'scripts' || key === 'browserslist' || key === 'files') {
             obj[key] = cloneDeep(repoPackage[key]);
 
