@@ -686,6 +686,12 @@ const projects = [
     dependencyClashes: ['lodash'],
     target: 'node',
   },
+  {
+    name: 'less-to-css-x',
+    identifier: SemVerLevel,
+    dependencyClashes: ['prettier'],
+    target: 'node',
+  },
 ];
 
 /**
