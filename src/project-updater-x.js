@@ -69,6 +69,8 @@ const packageKeyOrder = [
   'bugs',
   'dependencies',
   'devDependencies',
+  'peerDependencies',
+  'optionalDependencies',
   'engines',
   'browserslist',
 ];
