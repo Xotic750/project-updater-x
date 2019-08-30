@@ -45,13 +45,13 @@
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
-    "@types/node": "^12.7.2",
+    "@types/node": "^12.7.3",
     "@types/shelljs": "^0.8.5",
     "@types/webpack": "^4.39.1",
-    "@xotic750/eslint-config-recommended": "^1.1.8",
+    "@xotic750/eslint-config-recommended": "^1.1.9",
     "babel-eslint": "^10.0.3",
     "caniuse-lite": "^1.0.30000989",
-    "eslint": "^6.2.2",
+    "eslint": "^6.3.0",
     "eslint-friendly-formatter": "^4.0.1",
     "eslint-import-resolver-webpack": "^0.11.1",
     "eslint-loader": "^3.0.0",
@@ -61,8 +61,8 @@
     "eslint-plugin-eslint-comments": "^3.1.2",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.15.2",
-    "eslint-plugin-jsdoc": "^15.8.3",
+    "eslint-plugin-jest": "^22.16.0",
+    "eslint-plugin-jsdoc": "^15.8.4",
     "eslint-plugin-json": "^1.4.0",
     "eslint-plugin-lodash": "^6.0.0",
     "eslint-plugin-no-use-extend-native": "^0.4.1",
@@ -73,7 +73,7 @@
     "eslint-plugin-switch-case": "^1.1.2",
     "prettier": "^1.18.2",
     "rimraf": "^3.0.0",
-    "typescript": "^3.5.3",
+    "typescript": "^3.6.2",
     "webpack": "^4.39.3"
   },
   "engines": {
