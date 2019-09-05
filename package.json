@@ -35,7 +35,7 @@
     "url": "https://github.com/Xotic750/project-updater-x/issues"
   },
   "dependencies": {
-    "@xotic750/salita": "^1.0.1",
+    "@xotic750/salita": "^1.0.2",
     "bluebird": "^3.5.5",
     "github-api": "^3.3.0",
     "haikunator": "^2.1.1",
