@@ -700,6 +700,12 @@ const projects = [
     identifier: SemVerLevel,
     devDependencies: ['@typescript-eslint/eslint-plugin', '@typescript-eslint/parser'],
   },
+  {
+    name: '@xotic750/salita',
+    identifier: SemVerLevel,
+    devDependencies: ['power-set-x'],
+    target: 'node',
+  },
 ];
 
 /**
@@ -986,7 +992,7 @@ const letsGo = async () => {
           if (copyResult.code !== 0) {
             throw new Error(copyResult.stderr);
           }
-        } else if (name === 'replace-x' || name === 'less-to-css-x') {
+        } else if (name === 'replace-x' || name === 'less-to-css-x' || name === 'salita') {
           const skipThese = ['.babelrc', 'jest.config.js', 'webpack.config.js'];
 
           if (skipThese.includes(file)) {
@@ -1077,7 +1083,7 @@ const letsGo = async () => {
       console.log('Updating package.json');
       console.log();
       const modifiedRepoPackage = packageKeyOrder.reduce((obj, key) => {
-        if (name === 'replace-x' || name === 'less-to-css-x') {
+        if (name === 'replace-x' || name === 'less-to-css-x' || name === 'salita') {
           if (key === 'scripts' || key === 'browserslist' || key === 'files') {
             obj[key] = cloneDeep(repoPackage[key]);
 
