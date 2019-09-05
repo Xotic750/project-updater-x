@@ -37,7 +37,7 @@
   "dependencies": {
     "@xotic750/salita": "^1.0.0",
     "bluebird": "^3.5.5",
-    "github-api": "^3.2.3",
+    "github-api": "^3.3.0",
     "haikunator": "^2.1.1",
     "lodash": "^4.17.15",
     "readline-sync": "^1.4.10",
@@ -45,10 +45,10 @@
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
-    "@types/node": "^12.7.3",
+    "@types/node": "^12.7.4",
     "@types/shelljs": "^0.8.5",
     "@types/webpack": "^4.39.1",
-    "@xotic750/eslint-config-recommended": "^1.1.9",
+    "@xotic750/eslint-config-recommended": "^1.1.10",
     "babel-eslint": "^10.0.3",
     "caniuse-lite": "^1.0.30000989",
     "eslint": "^6.3.0",
@@ -61,8 +61,8 @@
     "eslint-plugin-eslint-comments": "^3.1.2",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.16.0",
-    "eslint-plugin-jsdoc": "^15.8.4",
+    "eslint-plugin-jest": "^22.17.0",
+    "eslint-plugin-jsdoc": "^15.9.1",
     "eslint-plugin-json": "^1.4.0",
     "eslint-plugin-lodash": "^6.0.0",
     "eslint-plugin-no-use-extend-native": "^0.4.1",
